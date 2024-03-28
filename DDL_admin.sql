@@ -1,16 +1,16 @@
 CREATE TABLE admin
     (id SERIAL PRIMARY KEY,
-    name CHAR(20),
-    password varchar(50));
+    name TEXT NOT NULL,
+    password text NOT NULL CHECK (char_length(name) >= 8 && char_length(name) <= 32));
 
 CREATE TABLE room
     (id SERIAL PRIMARY KEY,
-    name CHAR(20),
+    name text NOT NULL,
     FOREIGN KEY (admin_id) REFERENCES admin);
 
-CREATE TABLE eqipment
+CREATE TABLE equipment
     (id SERIAL PRIMARY KEY,
-    name CHAR(20),
-    condition BOOLEAN,
+    name text NOT NULL,
+    condition BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (room_id) REFERENCES room,
     FOREIGN KEY (admin_id) REFERENCES admin);
