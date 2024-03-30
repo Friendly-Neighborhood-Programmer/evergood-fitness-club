@@ -5,7 +5,7 @@ INSERT INTO trainer (name, password, specialty) VALUES
     ('holly heartbeat', '95bpmandlovingit', 'zumba');
 
 INSERT INTO class(name, trainer_id, room_id, start, end) VALUES
-    ('CycleCraze Spin Studio', 2, 6, '2024-04-30 07:00:00', '2023-04-30 8:30:00'),
+    ('CycleCraze Spin Studio', 2, 6, '2024-04-27 07:00:00', '2023-04-27 8:30:00'),
     ('Zumba-Zest Fiesta', 4, 8, '2024-04-25 06:00:00', '2023-04-25 7:30:00'),
     ('TreadTrek Treadmill Training', 2, 7, '2023-04-23 15:30:00', '2023-04-23 16:30:00');
 
