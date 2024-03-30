@@ -1,7 +1,7 @@
 CREATE TABLE routine
 	(
 		id SERIAL PRIMARY KEY,
-		name VARCHAR(255) NOT NULL,
+		name TEXT NOT NULL,
 		description TEXT
 	);
 CREATE TABLE goal
@@ -14,13 +14,14 @@ CREATE TABLE goal
 CREATE TABLE member
 	(
 		id SERIAL PRIMARY KEY,
-		name VARCHAR(255) NOT NULL,
+		name TEXT NOT NULL,
+		password text NOT NULL CHECK (char_length(name) >= 8 && char_length(name) <= 32));
 		age INT NOT NULL,
 		weight NUMERIC(5, 2),
 		height NUMERIC(5, 2),
-		phone VARCHAR(15),
+		phone VARCHAR(15) UNIQUE,
 		address VARCHAR(255),
-		email VARCHAR(255),
+		email VARCHAR(255) UNIQUE,
 		bill_amount NUMERIC(5,2),
 		paid BOOLEAN NOT NULL,
 		routine_id INT,
