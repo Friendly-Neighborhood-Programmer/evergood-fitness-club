@@ -1,17 +1,18 @@
 CREATE TABLE trainer(
 	id SERIAL,
-	name VARCHAR(255),
-	specialty VARCHAR(255),
+	name TEXT NOT NULL,
+	password TEXT NOT NULL CHECK (char_length(name) >= 8 && char_length(name) <= 32),
+	specialty TEXT,
 	PRIMARY KEY (id)
 );
 
 CREATE TABLE class(
 	id                SERIAL,
-	name              VARCHAR(20),
+	name              TEXT NOT NULL,
 	trainer_id        INT,
 	room_id           INT,
-        start             TIMESTAMP,
-        end               TIMESTAMP,
+    start             TIMESTAMP,
+    end               TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (trainer_id)
 		REFERENCES trainer (id),
@@ -21,12 +22,12 @@ CREATE TABLE class(
 
 CREATE TABLE personal_session(
 	id                SERIAL,
-	name              VARCHAR(20),
+	name              TEXT NOT NULL,
 	trainer_id        INT,
 	room_id           INT,
-        member_id         INT,
-        start             TIMESTAMP,
-        end               TIMESTAMP,
+    member_id         INT,
+    start             TIMESTAMP,
+    end               TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (trainer_id)
 		REFERENCES trainer (id),
