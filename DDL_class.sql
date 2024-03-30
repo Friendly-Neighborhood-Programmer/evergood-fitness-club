@@ -11,8 +11,8 @@ CREATE TABLE class(
 	name              TEXT NOT NULL,
 	trainer_id        INT,
 	room_id           INT,
-    start             TIMESTAMP,
-    end               TIMESTAMP,
+	start             TIMESTAMP,
+	end               TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (trainer_id)
 		REFERENCES trainer (id),
@@ -25,9 +25,9 @@ CREATE TABLE personal_session(
 	name              TEXT NOT NULL,
 	trainer_id        INT,
 	room_id           INT,
-    member_id         INT,
-    start             TIMESTAMP,
-    end               TIMESTAMP,
+	member_id         INT,
+	start             TIMESTAMP,
+	end               TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (trainer_id)
 		REFERENCES trainer (id),
@@ -38,8 +38,8 @@ CREATE TABLE personal_session(
 );
 
 CREATE TABLE member_takes_class(
-        member_id         INT,
-        class_id          INT,
+	member_id         INT,
+	class_id          INT,
 	FOREIGN KEY (member_id)
 		REFERENCES member (id),
 	FOREIGN KEY (class_id)
