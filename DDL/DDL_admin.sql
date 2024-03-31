@@ -1,7 +1,7 @@
 CREATE TABLE admin
     (id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    password TEXT NOT NULL CHECK (char_length(name) >= 8 && char_length(name) <= 32));
+    password TEXT NOT NULL CHECK (char_length(password) >= 8 && char_length(password) <= 32));
 
 CREATE TABLE room
     (id SERIAL PRIMARY KEY,
