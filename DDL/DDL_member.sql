@@ -4,13 +4,6 @@ CREATE TABLE routine
 		name TEXT NOT NULL,
 		description TEXT
 	);
-CREATE TABLE goal
-	(
-		id SERIAL PRIMARY KEY,
-		description TEXT,
-		member_id INT,
-		FOREIGN KEY (member_id) REFERENCES member(id)
-	);
 CREATE TABLE member
 	(
 		id SERIAL PRIMARY KEY,
@@ -27,4 +20,12 @@ CREATE TABLE member
 		routine_id INT,
 		FOREIGN KEY (routine_id) REFERENCES routine(id)
 	);
+CREATE TABLE goal
+	(
+		id SERIAL PRIMARY KEY,
+		description TEXT,
+		member_id INT,
+		FOREIGN KEY (member_id) REFERENCES member(id)
+	);
+
 	
