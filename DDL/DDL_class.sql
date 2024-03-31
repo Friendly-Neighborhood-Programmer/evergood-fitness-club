@@ -1,7 +1,7 @@
 CREATE TABLE trainer(
 	id SERIAL,
 	name TEXT NOT NULL,
-	password TEXT NOT NULL CHECK (char_length(password) >= 8 && char_length(password) <= 32),
+	password TEXT NOT NULL CHECK (char_length(password) >= 8 AND char_length(password) <= 32),
 	specialty TEXT,
 	PRIMARY KEY (id)
 );

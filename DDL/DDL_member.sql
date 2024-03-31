@@ -15,7 +15,7 @@ CREATE TABLE member
 	(
 		id SERIAL PRIMARY KEY,
 		name TEXT NOT NULL,
-		password TEXT NOT NULL CHECK (char_length(password) >= 8 && char_length(password) <= 32),
+		password TEXT NOT NULL CHECK (char_length(password) >= 8 AND char_length(password) <= 32),
 		age INT NOT NULL,
 		weight NUMERIC(5, 2),
 		height NUMERIC(5, 2),

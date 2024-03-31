@@ -6,7 +6,8 @@ VALUES
 INSERT INTO member (name, password, age, weight, height, phone, address, email, bill_amount, paid, routine_id)
 VALUES
   ("Isaac Roberts", "12345678", 30, 170, "613-613-6133", "1 Malvern Street", "isaac@gmail.com", 250, FALSE, 1),
-  ("Rachel Steward", "12345678", 30, 140, "613-613-6134", "2 Malvern Street", "rachel@gmail.com", 250, FALSE, 1);
+  ("Rachel Steward", "12345678", 30, 140, "613-613-6134", "2 Malvern Street", "rachel@gmail.com", 250, FALSE, 1),
+  ("Dummy", "12345678", 30, 170, "613-613-6133", "1 Malvern Street", "dummy@gmail.com", 250, TRUE, 1);
 
 INSERT INTO goal (description, member_id)
 VALUES
