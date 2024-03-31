@@ -26,8 +26,8 @@ CREATE TABLE personal_session(
 	trainer_id        INT,
 	room_id           INT,
 	member_id         INT,
-	start             TIMESTAMP,
-	end               TIMESTAMP,
+	start_time        TIMESTAMP,
+	end_time               TIMESTAMP,
 	PRIMARY KEY (id),
 	FOREIGN KEY (trainer_id)
 		REFERENCES trainer (id),
