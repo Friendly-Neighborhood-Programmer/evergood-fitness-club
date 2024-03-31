@@ -3,7 +3,8 @@ CREATE TYPE DAY AS ENUM ('SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT');
 CREATE TABLE admin
     (id         SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
-    password    TEXT NOT NULL CHECK (char_length(password) >= 8 AND char_length(password) <= 32));
+    password    TEXT NOT NULL 
+        CHECK (char_length(password) >= 8 AND char_length(password) <= 32));
 
 CREATE TABLE room
     (id         SERIAL PRIMARY KEY,
@@ -30,7 +31,7 @@ CREATE TABLE routine
 
 CREATE TABLE goal
 	(id         SERIAL PRIMARY KEY,
-    description TEXT,
+    description TEXT NOT NULL,
     member_id   INT,
     FOREIGN KEY (member_id) 
         REFERENCES member(id));
@@ -38,15 +39,16 @@ CREATE TABLE goal
 CREATE TABLE member
 	(id         SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
-    password    TEXT NOT NULL CHECK (char_length(password) >= 8 AND char_length(password) <= 32),
-    age         INT NOT NULL,
-    weight      NUMERIC(5, 2),
-    height      NUMERIC(5, 2),
-    phone       VARCHAR(15) UNIQUE,
-    address     VARCHAR(255),
-    email       VARCHAR(255) UNIQUE,
-    bill_amount NUMERIC(5,2),
-    paid        BOOLEAN NOT NULL,
+    age         INT  NOT NULL,
+    address     TEXT NOT NULL,
+    phone       TEXT NOT NULL UNIQUE,
+    email       TEXT NOT NULL UNIQUE,
+    weight      NUMERIC(5, 2) NOT NULL,
+    height      NUMERIC(5, 2) NOT NULL,
+    bill_amount NUMERIC(5, 2) NOT NULL,
+    paid        BOOLEAN DEFAULT FALSE,
+    password    TEXT NOT NULL 
+        CHECK (char_length(password) >= 8 AND char_length(password) <= 32),
     routine_id  INT,
     FOREIGN KEY (routine_id)
         REFERENCES routine(id));
@@ -54,27 +56,29 @@ CREATE TABLE member
 CREATE TABLE trainer
     (id         SERIAL PRIMARY KEY,
 	name        TEXT NOT NULL,
-	password    TEXT NOT NULL CHECK (char_length(password) >= 8 AND char_length(password) <= 32),
-	specialty   TEXT);
+	specialty   TEXT NOT NULL,
+	password    TEXT NOT NULL   
+        CHECK (char_length(password) >= 8 AND char_length(password) <= 32));
 
 CREATE TABLE class
-    (id         SERIAL PRIMARY KEY ,
+    (id         SERIAL PRIMARY KEY,
 	name        TEXT NOT NULL,
+    day         DAY  NOT NULL,
+	start_time  TIME NOT NULL,
+	end_time    TIME NOT NULL,
 	trainer_id  INT,
 	room_id     INT,
-	start_time  TIME,
-	end_time    TIME,
 	FOREIGN KEY (trainer_id) 
         REFERENCES trainer(id),
 	FOREIGN KEY (room_id)
         REFERENCES room(id));
 
-CREATE TABLE personal_session(
-	id          SERIAL PRIMARY KEY,
+CREATE TABLE personal_session
+    (id         SERIAL PRIMARY KEY,
 	name        TEXT NOT NULL,
-	start_time  TIME,
-	end_time    TIME,
-    day         DAY,
+    day         DAY  NOT NULL,
+	start_time  TIME NOT NULL,
+	end_time    TIME NOT NULL,
 	trainer_id  INT,
 	room_id     INT,
 	member_id   INT,
@@ -85,8 +89,8 @@ CREATE TABLE personal_session(
 	FOREIGN KEY (member_id)
 		REFERENCES member(id));
 
-CREATE TABLE member_takes_class(
-	member_id   INT,
+CREATE TABLE member_takes_class
+    (member_id  INT,
 	class_id    INT,
 	FOREIGN KEY (member_id)
 		REFERENCES member(id),
