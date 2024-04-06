@@ -29,48 +29,37 @@ def loginTrainer(name, password):
 def trainerMenu():
     print("(1) Schedule Management\n(2) View Member Profile\n(q) Log out")
 
-def checkClassesOverlap(s, e, d, id, type):
-    cursor.execute(f"SELECT * FROM class WHERE day = '{d}' AND \
+def checkOverlapTable(s, e, d, id, type, table):
+    cursor.execute(f"SELECT * FROM {table} WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
                    end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {type}_id = {id};")
-    res = cursor.fetchall()
-    if(res):
-        return True
-    else:
-        return False
-    
-def checkSessionsOverlap(s, e, d, id, type):
-    cursor.execute(f"SELECT * FROM personal_session WHERE day = '{d}' AND \
-                   (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
-                   end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {type}_id = {id};")
-    res = cursor.fetchall()
-    if(res):
+    if(cursor.fetchall()):
         return True
     else:
         return False
 
-def checkOverlap(s, e, d, id, type):
-    return checkClassesOverlap(s, e, d, id, type) or checkSessionsOverlap(s, e, d, id, type)
+def checkOverlapType(s, e, d, id, type):
+    return checkOverlapTable(s, e, d, id, type, "class") or checkOverlapTable(s, e, d, id, type, "personal_session")
 
 def addSession(name, s, e, d, tid, rid):
-    if (not (checkOverlap(s, e, d, tid, 'trainer') or checkOverlap(s, e, d, rid, 'room'))):
+    if (not (checkOverlapType(s, e, d, tid, 'trainer') or checkOverlapType(s, e, d, rid, 'room'))):
         cursor.execute(f"INSERT INTO personal_session(name, trainer_id, room_id, member_id, day, start_time, end_time) VALUES\
                        ('{name}', {tid}, {rid}, 1, '{d}', '{s}', '{e}');")
         connection.commit()
         return True
     return False
 
-def printAvailableRooms(s, e, d):
-    cursor.execute(f"SELECT * FROM room WHERE NOT EXISTS( \
+def printAvailable(s, e, d, table):
+    cursor.execute(f"SELECT * FROM {table} WHERE NOT EXISTS( \
                    SELECT * FROM class WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
-                   end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND room_id = room.id)\
+                   end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {table}_id = {table}.id)\
                    AND NOT EXISTS( \
                    SELECT * FROM personal_session WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
-                   end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND room_id = room.id);")
+                   end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {table}_id = {table}.id);")
     res = cursor.fetchall()
-    printRooms(res)
+    return res
     
 def findMember(name):
     cursor.execute(f"SELECT id FROM member WHERE name = '{name}';")
@@ -94,4 +83,4 @@ print(loginTrainer('max muscle', 'gains4days'))
 print(checkSessionsOverlap('10:00:00', '11:00:00', 'TUE', 1, 'trainer'))
 print(checkSessionsOverlap('09:00:00', '11:00:00', 'MON', 1, 'trainer'))
 
-printAvailableRooms('10:00:00', '11:00:00', 'TUE')
+printRooms(printAvailable('10:00:00', '11:00:00', 'TUE', 'room'))
