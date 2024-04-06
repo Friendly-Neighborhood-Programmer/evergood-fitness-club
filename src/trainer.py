@@ -29,31 +29,36 @@ def loginTrainer(name, password):
 def trainerMenu():
     print("(1) Schedule Management\n(2) View Member Profile\n(q) Log out")
 
-def checkClassesOverlapTrainer(s, e, d, tid):
+def checkClassesOverlap(s, e, d, id, type):
     cursor.execute(f"SELECT * FROM class WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
-                   end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND trainer_id = {tid};")
+                   end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {type}_id = {id};")
     res = cursor.fetchall()
     if(res):
         return True
     else:
         return False
     
-def checkSessionsOverlapTrainer(s, e, d, tid):
+def checkSessionsOverlap(s, e, d, id, type):
     cursor.execute(f"SELECT * FROM personal_session WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
-                   end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND trainer_id = {tid};")
+                   end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {type}_id = {id};")
     res = cursor.fetchall()
     if(res):
         return True
     else:
         return False
 
-def checkOverlapTrainer(s, e, d, tid):
-    return    checkClassesOverlapTrainer(s, e, d, tid) or  checkSessionsOverlapTrainer(s, e, d, tid)
+def checkOverlap(s, e, d, id, type):
+    return checkClassesOverlap(s, e, d, id, type) or checkSessionsOverlap(s, e, d, id, type)
 
-def addSession(s, e, d, tid, rid):
-    return
+def addSession(name, s, e, d, tid, rid):
+    if (not (checkOverlap(s, e, d, tid, 'trainer') or checkOverlap(s, e, d, rid, 'room'))):
+        cursor.execute(f"INSERT INTO personal_session(name, trainer_id, room_id, member_id, day, start_time, end_time) VALUES\
+                       ('{name}', {tid}, {rid}, 1, '{d}', '{s}', '{e}');")
+        connection.commit()
+        return True
+    return False
     
 def findMember(name):
     cursor.execute(f"SELECT id FROM member WHERE name = '{name}';")
@@ -66,5 +71,5 @@ def findMember(name):
     
 print(loginTrainer('lance lift', 'bigmuscles'))
 print(loginTrainer('max muscle', 'gains4days'))
-print(checkSessionsOverlapTrainer('10:00:00', '11:00:00', 'TUE', 1))
-print(checkSessionsOverlapTrainer('09:00:00', '11:00:00', 'MON', 1))
+print(checkSessionsOverlap('10:00:00', '11:00:00', 'TUE', 1, 'trainer'))
+print(checkSessionsOverlap('09:00:00', '11:00:00', 'MON', 1, 'trainer'))
