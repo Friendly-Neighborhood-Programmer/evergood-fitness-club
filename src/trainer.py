@@ -30,10 +30,30 @@ def trainerMenu():
     print("(1) Schedule Management\n(2) View Member Profile\n(q) Log out")
 
 def getAllClasses():
-    return
+    cursor.execute(f"SELECT class.name, class.day, class.start_time, class.end_time, trainer.name, class.id \
+                   FROM class \
+                   INNER JOIN trainer ON trainer.id = class.trainer_id \
+                   INNER JOIN room ON room.id = class.room_id \
+                   ORDER BY class.day, class.start_time;")
+    print(f"Classes this week\n{'Class name': ^30}|{'Date': <5}|{'Start': <10}|{'End': <10}|{'Trainer': <20}|Registered")
+    res = cursor.fetchall()
+    for row in res:
+        print(f"{row[0]: <30}|{row[1]: <5}| {row[2]} | {row[3]} |{row[4]: <20}|", end="")
+        cursor.execute(f"SELECT member.name FROM member INNER JOIN member_takes_class ON member.id = member_takes_class.member_id WHERE member_takes_class.class_id = {row[5]};")
+        for innerRow in cursor.fetchall():
+            print(f"{innerRow[0]}, ", end="")
+        print()
 
 def getAllSessions():
-    return
+    cursor.execute(f"SELECT personal_session.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name, member.name \
+                   FROM personal_session \
+                   INNER JOIN trainer ON trainer.id = personal_session.trainer_id \
+                   INNER JOIN member ON member.id = personal_session.member_id \
+                   INNER JOIN room ON room.id = personal_session.room_id \
+                   ORDER BY personal_session.day, personal_session.start_time;")
+    print(f"Personal Sessions this week\n{'Sesson name': ^20}|{'Date': <5}|{'Start': <10}|{'End': <10}|{'Trainer': <20}|{'Member': <15}")
+    for row in cursor.fetchall():
+        print(f"{row[0]: ^20}|{row[1]: <5}| {row[2]} | {row[3]} |{row[4]: <20}|{row[5]: <15}")
 
 def checkOverlapTable(s, e, d, id, type, table):
     cursor.execute(f"SELECT * FROM {table} WHERE day = '{d}' AND \
@@ -90,3 +110,5 @@ print(checkOverlapType('09:00:00', '11:00:00', 'MON', 1, 'trainer'))
 
 getAvailable('10:00:00', '11:00:00', 'TUE', 'room')
 getAvailable('10:00:00', '11:00:00', 'TUE', 'trainer')
+getAllSessions()
+getAllClasses()
