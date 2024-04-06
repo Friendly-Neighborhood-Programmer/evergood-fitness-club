@@ -29,6 +29,12 @@ def loginTrainer(name, password):
 def trainerMenu():
     print("(1) Schedule Management\n(2) View Member Profile\n(q) Log out")
 
+def getAllClasses():
+    return
+
+def getAllSessions():
+    return
+
 def checkOverlapTable(s, e, d, id, type, table):
     cursor.execute(f"SELECT * FROM {table} WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
@@ -59,7 +65,12 @@ def getAvailable(s, e, d, table):
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
                    end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {table}_id = {table}.id);")
     res = cursor.fetchall()
-    return res
+    print(f"Available {table}s on {d} from {s} to {e}\n{'id': ^5}|{'name': <30}")
+    for i in range(25):
+        print("-", end="")
+    print()
+    for row in res:
+        print(f"{row[0]: ^5}|{row[1] : <20}")
     
 def findMember(name):
     cursor.execute(f"SELECT id FROM member WHERE name = '{name}';")
@@ -70,17 +81,12 @@ def findMember(name):
     else:
         return None
 
-def printRooms(res):
-    print(f"Rooms\n{'id': ^5}|{'name': ^20}")
-    for i in range(25):
-        print("-", end="")
-    print()
-    for row in res:
-        print(f"{row[0]: ^5}|{row[1] : <20}")
+    
     
 print(loginTrainer('lance lift', 'bigmuscles'))
 print(loginTrainer('max muscle', 'gains4days'))
 print(checkOverlapType('10:00:00', '11:00:00', 'TUE', 1, 'trainer'))
 print(checkOverlapType('09:00:00', '11:00:00', 'MON', 1, 'trainer'))
 
-printRooms(getAvailable('10:00:00', '11:00:00', 'TUE', 'room'))
+getAvailable('10:00:00', '11:00:00', 'TUE', 'room')
+getAvailable('10:00:00', '11:00:00', 'TUE', 'trainer')
