@@ -49,7 +49,7 @@ def addSession(name, s, e, d, tid, rid):
         return True
     return False
 
-def printAvailable(s, e, d, table):
+def getAvailable(s, e, d, table):
     cursor.execute(f"SELECT * FROM {table} WHERE NOT EXISTS( \
                    SELECT * FROM class WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
@@ -80,7 +80,7 @@ def printRooms(res):
     
 print(loginTrainer('lance lift', 'bigmuscles'))
 print(loginTrainer('max muscle', 'gains4days'))
-print(checkSessionsOverlap('10:00:00', '11:00:00', 'TUE', 1, 'trainer'))
-print(checkSessionsOverlap('09:00:00', '11:00:00', 'MON', 1, 'trainer'))
+print(checkOverlapType('10:00:00', '11:00:00', 'TUE', 1, 'trainer'))
+print(checkOverlapType('09:00:00', '11:00:00', 'MON', 1, 'trainer'))
 
-printRooms(printAvailable('10:00:00', '11:00:00', 'TUE', 'room'))
+printRooms(getAvailable('10:00:00', '11:00:00', 'TUE', 'room'))
