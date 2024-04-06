@@ -27,5 +27,28 @@ CREATE TABLE goal
 		member_id INT,
 		FOREIGN KEY (member_id) REFERENCES member(id)
 	);
+CREATE TABLE weight
+	(
+		id SERIAL PRIMARY KEY,
+		kg NUMERIC(5, 2) NOT NULL,
+		member_id INT,
+		FOREIGN KEY (member_id) REFERENCES member(id)
+	);
+CREATE TABLE step
+	(
+		id SERIAL PRIMARY KEY,
+		count INT NOT NULL,
+		member_id INT,
+		FOREIGN KEY (member_id) REFERENCES member(id)
+	);
+CREATE TABLE heartrate
+	(
+		id SERIAL PRIMARY KEY,
+		bpm NUMERIC(5, 2) NOT NULL,
+		member_id INT,
+		FOREIGN KEY (member_id) REFERENCES member(id)
+	);
+
+
 
 	

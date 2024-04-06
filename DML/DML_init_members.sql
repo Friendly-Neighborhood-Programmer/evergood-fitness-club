@@ -9,9 +9,23 @@ VALUES
   ('Isaac Roberts', '12345678', 30, 170, 170, '613-613-6133', '1 Malvern Street', 'isaac@gmail.com', 250, FALSE, 1),
   ('Rachel Steward', '12345678', 30, 140, 140, '613-613-6134', '2 Malvern Street', 'rachel@gmail.com', 250, FALSE, 1);
   
-
 INSERT INTO goal (description, member_id)
 VALUES
-  ('BECOME BIG STRONG MAN', 1),
-  ('BECOME BIG STRONG WOMAN', 2);
+  ('BECOME BIG STRONG MAN', 2),
+  ('BECOME BIG STRONG WOMAN', 3);
+
+INSERT INTO weight (kg, member_id)
+VALUES
+  (170, 2),
+  (140, 3);
+
+INSERT INTO step (count, member_id)
+VALUES
+  (10000, 2),
+  (20000, 3);
+
+INSERT INTO heartrate (bpm, member_id)
+VALUES
+  (100, 2),
+  (100, 3);
 
