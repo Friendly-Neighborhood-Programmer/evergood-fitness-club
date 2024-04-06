@@ -15,7 +15,7 @@ CREATE TABLE member
 		phone VARCHAR(15) UNIQUE,
 		address VARCHAR(255),
 		email VARCHAR(255) UNIQUE,
-		bill_amount NUMERIC(5,2),
+		bill_amount NUMERIC(5,2) DEFAULT 250,
 		paid BOOLEAN NOT NULL,
 		routine_id INT,
 		FOREIGN KEY (routine_id) REFERENCES routine(id)

@@ -38,7 +38,7 @@ CREATE TABLE member
     email       TEXT NOT NULL UNIQUE,
     weight      NUMERIC(5, 2) NOT NULL,
     height      NUMERIC(5, 2) NOT NULL,
-    bill_amount NUMERIC(5, 2) NOT NULL,
+    bill_amount NUMERIC(5,2) DEFAULT 250,
     paid        BOOLEAN DEFAULT FALSE,
     password    TEXT NOT NULL 
         CHECK (char_length(password) >= 8 AND char_length(password) <= 32),
