@@ -67,6 +67,21 @@ INSERT INTO goal (description, member_id) VALUES
     ('BECOME BIG STRONG MAN', 1),
     ('BECOME BIG STRONG WOMAN', 2);
 
+INSERT INTO weight (kg, member_id)
+VALUES
+  (170, 2),
+  (140, 3);
+
+INSERT INTO step (count, member_id)
+VALUES
+  (10000, 2),
+  (20000, 3);
+
+INSERT INTO heartrate (bpm, member_id)
+VALUES
+  (100, 2),
+  (100, 3);
+
 INSERT INTO trainer (name, password, specialty) VALUES
     ('lance lift', 'bigmuscles', 'deadlifts'),
     ('tina treadmill', 'I<3running', 'cardio machines'),
