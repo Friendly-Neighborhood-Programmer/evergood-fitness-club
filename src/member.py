@@ -114,7 +114,7 @@ def viewMetrics(cursor, id):
         print("Could not find metrics information.")
 
 #add achievement
-def addAchievement(id, name):
+def addAchievement(cursor, id, name):
     try:
         cursor.execute(f"INSERT INTO achievement (name, member_id) \
                         SELECT '{name}', {id}\
@@ -177,13 +177,7 @@ def addHeartrate(cursor, id, bpm):
         print(str(e))
         return False
 
-def dashboardMenu():
-    print("(1) Routines\n(2) Achievements\n(3) Health Statistics(q) Back")
-
-def routinesMenu():
-    print("(1) Change Routine")
-
-def viewSelectedRoutine(id):
+def viewSelectedRoutine(cursor, id):
     cursor.execute(f"SELECT routine.name, description\
                     FROM member JOIN routine ON member.routine_id = routine.id\
                     WHERE member.id = {id}")
@@ -194,7 +188,7 @@ def viewSelectedRoutine(id):
     else:
         print("Could not find routine information.")
 
-def changeSelectedRoutine(id, routine_id):
+def changeSelectedRoutine(cursor, id, routine_id):
     try:
         cursor.execute(f"UPDATE member\
                         SET routine_id = {routine_id}\
@@ -206,7 +200,7 @@ def changeSelectedRoutine(id, routine_id):
         print(str(e))
         return False
 
-def viewAchievements(id):
+def viewAchievements(cursor, id):
     cursor.execute(f"SELECT name\
                     FROM achievement\
                     WHERE member_id = {id}\
@@ -218,7 +212,7 @@ def viewAchievements(id):
     else:
         print("Could not find achievement information.")
 
-def viewWeightStatistics(id):
+def viewWeightStatistics(cursor, id):
     cursor.execute(f"SELECT MAX(kg) FROM weight GROUP BY member_id HAVING member_id = {id};")
     max = cursor.fetchall()
     cursor.execute(f"SELECT MIN(kg) FROM weight GROUP BY member_id HAVING member_id = {id};")
@@ -233,7 +227,7 @@ def viewWeightStatistics(id):
     else:
         print("Could not find weight information.")
 
-def viewStepsStatistics(id):
+def viewStepsStatistics(cursor, id):
     cursor.execute(f"SELECT MAX(count) FROM step GROUP BY member_id HAVING member_id = {id};")
     max = cursor.fetchall()
     cursor.execute(f"SELECT MIN(count) FROM step GROUP BY member_id HAVING member_id = {id};")
@@ -248,7 +242,7 @@ def viewStepsStatistics(id):
     else:
         print("Could not find steps information.")
 
-def viewHeartrateStatistics(id):
+def viewHeartrateStatistics(cursor, id):
     cursor.execute(f"SELECT MAX(bpm) FROM heartrate GROUP BY member_id HAVING member_id = {id};")
     max = cursor.fetchall()
     cursor.execute(f"SELECT MIN(bpm) FROM heartrate GROUP BY member_id HAVING member_id = {id};")
@@ -268,32 +262,6 @@ def viewHealthStatistics(id):
     viewStepsStatistics(id)
     viewHeartrateStatistics(id)
 
-
-#viewPersonalInformation(9)
-#update = {'name':'danny', 'age':2}
-#updatePersonalInformation(9, update)
-#viewPersonalInformation(9)
-#
-#viewGoals(9)
-#createGoal(9, "weee")
-#viewGoals(9)
-#
-#viewMetrics(9)
-#addWeight(3, 200)
-#addSteps(3, 20000)
-#addHeartrate(3, 150)
-#viewMetrics(9)
-#print(login("isaac@gmail.com", "12345678"))
-#createNewMember("d", "12345678", 1, 1, 1, '1', '1', 'daniel@gmail.com')
-#print(login("daniel@gmail.com", "12345678"))
-
-#viewSelectedRoutine(3)
-##changeSelectedRoutine(3, 2)
-#viewSelectedRoutine(3)
-
-#viewAchievements(3)
-
-viewHealthStatistics(3)
 # UI menus for member
 def trainerMenu():
     print("(1) Profile Management\n(2) Dashboard\n(3) Schedule Management\n(q) Back")
@@ -310,21 +278,11 @@ def goalsMenu():
 def healthMetricsMenu():
     print("(1) View All Metrics\n(2) Enter weight\n(3) Enter steps\n (4) Enter heartrate")
 
+def dashboardMenu():
+    print("(1) Routines\n(2) Achievements\n(3) Health Statistics(q) Back")
+
+def routinesMenu():
+    print("(1) Change Routine")
+    
 if __name__ == "__main__":
-    viewPersonalInformation(9)
-    update = {'name':'danny', 'age':2}
-    updatePersonalInformation(9, update)
-    viewPersonalInformation(9)
-
-    viewGoals(9)
-    createGoal(9, "weee")
-    viewGoals(9)
-
-    viewMetrics(9)
-    addWeight(9, 12)
-    addSteps(9, 1000)
-    addHeartrate(9, 100)
-    viewMetrics(9)
-    #print(login("isaac@gmail.com", "12345678"))
-    #createNewMember("d", "12345678", 1, 1, 1, '1', '1', 'daniel@gmail.com')
-    #print(login("daniel@gmail.com", "12345678"))
+    print('test')
