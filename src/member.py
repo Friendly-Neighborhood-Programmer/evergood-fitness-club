@@ -64,7 +64,7 @@ def viewPersonalInformation(id):
 #updates member name, age, address, phone, email, password
 def updatePersonalInformation(id, updateMap):
     try:
-        for key, value in updateMap:
+        for (key, value) in updateMap.items():
             if key == 'age':
                 cursor.execute(f"UPDATE member\
 	                        SET {key} = {value}\
@@ -88,7 +88,7 @@ def viewGoals(id):
     if (res):
         print(res)
     else:
-        print("Could not find personal information.")
+        print("Could not find goals information.")
 
 #add a goal for a user, return True if successful, False otherwise
 def createGoal(id, description):
@@ -105,17 +105,21 @@ def createGoal(id, description):
     
 #prints all metrics entered
 def viewMetrics(id):
-    cursor.execute(f"SELECT kg FROM weight WHERE weight.member_id = {id}")
+    cursor.execute(f"SELECT kg FROM weight WHERE weight.member_id = {id};")
+    weights = cursor.fetchall()
     cursor.execute(f"SELECT count FROM step WHERE step.member_id = {id}")
+    steps = cursor.fetchall()
     cursor.execute(f"SELECT bpm FROM heartrate WHERE heartrate.member_id = {id}")
-    res = cursor.fetchall()
+    bpms = cursor.fetchall()
 
-    if (res):
-        print(res)
+    if (weights or steps or bpms):
+        print(weights) if weights else None
+        print(steps) if steps else None
+        print(bpms) if bpms else None
     else:
-        print("Could not find personal information.")
+        print("Could not find metrics information.")
 
-#add weight entry
+#add weight entry, return True if successful, False otherwise
 def addWeight(id, kg):
     try:
         cursor.execute(f"INSERT INTO weight (kg, member_id) \
@@ -127,10 +131,10 @@ def addWeight(id, kg):
         print(str(e))
         return False
 
-#add steps entry
+#add steps entry, return True if successful, False otherwise
 def addSteps(id, count):
     try:
-        cursor.execute(f"INSERT INTO steps (count, member_id) \
+        cursor.execute(f"INSERT INTO step (count, member_id) \
                        VALUES({count}, {id});")
         connection.commit()
         return True
@@ -139,7 +143,7 @@ def addSteps(id, count):
         print(str(e))
         return False
 
-#add heartrate entry
+#add heartrate entry, return True if successful, False otherwise
 def addHeartrate(id, bpm):
     try:
         cursor.execute(f"INSERT INTO heartrate (bpm, member_id) \
@@ -151,6 +155,20 @@ def addHeartrate(id, bpm):
         print(str(e))
         return False
 
+viewPersonalInformation(9)
+update = {'name':'danny', 'age':2}
+updatePersonalInformation(9, update)
+viewPersonalInformation(9)
+
+viewGoals(9)
+createGoal(9, "weee")
+viewGoals(9)
+
+viewMetrics(9)
+addWeight(9, 12)
+addSteps(9, 1000)
+addHeartrate(9, 100)
+viewMetrics(9)
 #print(login("isaac@gmail.com", "12345678"))
 #createNewMember("d", "12345678", 1, 1, 1, '1', '1', 'daniel@gmail.com')
 #print(login("daniel@gmail.com", "12345678"))
