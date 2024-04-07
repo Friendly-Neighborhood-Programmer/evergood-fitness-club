@@ -2,22 +2,8 @@ import psycopg2
 import sys
 #TODO: import Member file
 
-# Connect to the A3 database
-def connect():
-    con = psycopg2.connect(
-        dbname="Fitness",
-        user="postgres",
-        password="comp3005",
-        host="localhost",
-        port="5432"
-    ) 
-    return (con, con.cursor())
-
-# Global connection and cursor objects
-(connection, cursor) = connect()
-
 #returns trainer id if successful and none otherwise
-def loginTrainer(name, password):
+def login_trainer(cursor, name, password):
     cursor.execute(f"SELECT id FROM trainer WHERE name = '{name}' and password = '{password}';")
     res = cursor.fetchall()
     if(res):
@@ -26,10 +12,10 @@ def loginTrainer(name, password):
     else:
         return None
 
-def trainerMenu():
+def trainer_menu():
     print("(1) Schedule Management\n(2) View Member Profile\n(q) Log out")
 
-def getAllClasses():
+def get_all_classes(cursor):
     cursor.execute(f"SELECT class.name, class.day, class.start_time, class.end_time, trainer.name, class.id \
                    FROM class \
                    INNER JOIN trainer ON trainer.id = class.trainer_id \
@@ -44,7 +30,7 @@ def getAllClasses():
             print(f"{innerRow[0]}, ", end="")
         print()
 
-def getAllSessions():
+def get_all_sessions(cursor):
     cursor.execute(f"SELECT personal_session.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name, member.name \
                    FROM personal_session \
                    INNER JOIN trainer ON trainer.id = personal_session.trainer_id \
@@ -55,7 +41,7 @@ def getAllSessions():
     for row in cursor.fetchall():
         print(f"{row[0]: ^20}|{row[1]: <5}| {row[2]} | {row[3]} |{row[4]: <20}|{row[5]: <15}")
 
-def checkOverlapTable(s, e, d, id, type, table):
+def check_time_overlap(cursor, s, e, d, id, type, table):
     cursor.execute(f"SELECT * FROM {table} WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
                    end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {type}_id = {id};")
@@ -64,18 +50,17 @@ def checkOverlapTable(s, e, d, id, type, table):
     else:
         return False
 
-def checkOverlapType(s, e, d, id, type):
-    return checkOverlapTable(s, e, d, id, type, "class") or checkOverlapTable(s, e, d, id, type, "personal_session")
+def check_overlap_type(cursor, s, e, d, id, type):
+    return check_time_overlap(cursor, s, e, d, id, type, "class") or check_time_overlap(cursor, s, e, d, id, type, "personal_session")
 
-def addSession(name, s, e, d, tid, rid):
-    if (not (checkOverlapType(s, e, d, tid, 'trainer') or checkOverlapType(s, e, d, rid, 'room'))):
+def add_session(cursor, name, s, e, d, tid, rid):
+    if (not (check_overlap_type(cursor, s, e, d, tid, 'trainer') or check_overlap_type(cursor, s, e, d, rid, 'room'))):
         cursor.execute(f"INSERT INTO personal_session(name, trainer_id, room_id, member_id, day, start_time, end_time) VALUES\
                        ('{name}', {tid}, {rid}, 1, '{d}', '{s}', '{e}');")
-        connection.commit()
         return True
     return False
 
-def getAvailable(s, e, d, table):
+def get_available(cursor, s, e, d, table):
     cursor.execute(f"SELECT * FROM {table} WHERE NOT EXISTS( \
                    SELECT * FROM class WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
@@ -92,7 +77,7 @@ def getAvailable(s, e, d, table):
     for row in res:
         print(f"{row[0]: ^5}|{row[1] : <20}")
     
-def findMember(name):
+def find_member(cursor, name):
     cursor.execute(f"SELECT id FROM member WHERE name = '{name}';")
     res = cursor.fetchall()
     if(res):
@@ -100,15 +85,3 @@ def findMember(name):
         return member_id
     else:
         return None
-
-    
-    
-print(loginTrainer('lance lift', 'bigmuscles'))
-print(loginTrainer('max muscle', 'gains4days'))
-print(checkOverlapType('10:00:00', '11:00:00', 'TUE', 1, 'trainer'))
-print(checkOverlapType('09:00:00', '11:00:00', 'MON', 1, 'trainer'))
-
-getAvailable('10:00:00', '11:00:00', 'TUE', 'room')
-getAvailable('10:00:00', '11:00:00', 'TUE', 'trainer')
-getAllSessions()
-getAllClasses()
