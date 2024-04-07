@@ -16,30 +16,65 @@ def trainer_menu():
     print("(1) Schedule Management\n(2) View Member Profile\n(q) Log out")
 
 def get_all_classes(cursor):
-    cursor.execute(f"SELECT class.name, class.day, class.start_time, class.end_time, trainer.name, class.id \
+    cursor.execute(f"SELECT class.id, class.name, room.name, class.day, class.start_time, class.end_time, trainer.name \
                    FROM class \
                    INNER JOIN trainer ON trainer.id = class.trainer_id \
                    INNER JOIN room ON room.id = class.room_id \
                    ORDER BY class.day, class.start_time;")
-    print(f"Classes this week\n{'Class name': ^30}|{'Date': <5}|{'Start': <10}|{'End': <10}|{'Trainer': <20}|Registered")
+    print(f"Classes this week\n{'id': ^4}|{'class name': ^30}|{'room': <15}|{'date': <5}|{'start': <10}|{'end': <10}|{'trainer': <20}|registered")
     res = cursor.fetchall()
     for row in res:
-        print(f"{row[0]: <30}|{row[1]: <5}| {row[2]} | {row[3]} |{row[4]: <20}|", end="")
-        cursor.execute(f"SELECT member.name FROM member INNER JOIN member_takes_class ON member.id = member_takes_class.member_id WHERE member_takes_class.class_id = {row[5]};")
+        print(f"{row[0]: <4}|{row[1]: <30}|{row[2]: <15}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <20}|", end="")
+        cursor.execute(f"SELECT member.name FROM member INNER JOIN member_takes_class ON member.id = member_takes_class.member_id WHERE member_takes_class.class_id = {row[0]};")
+        for innerRow in cursor.fetchall():
+            print(f"{innerRow[0]}, ", end="")
+        print()
+
+#get all classes by type (use for trainer or room)
+def get_all_classes_by_type(cursor, type, id):
+    other = 'trainer'
+    if(type=='room'):
+        other = 'trainer'
+    cursor.execute(f"SELECT class.id, class.name, {other}.name, class.day, class.start_time, class.end_time \
+                   FROM class \
+                   INNER JOIN trainer ON trainer.id = class.trainer_id \
+                   INNER JOIN room ON room.id = class.room_id \
+                   WHERE class.{type}_id = {id}\
+                   ORDER BY class.day, class.start_time;")
+    print(f"Classes this week\n{'id': ^4}|{'class name': ^30}|{other: <20}|{'date': <5}|{'start': <10}|{'end': <10}|registered")
+    res = cursor.fetchall()
+    for row in res:
+        print(f"{row[0]: <4}|{row[1]: <30}|{row[2]: <20}|{row[3]: <5}| {row[4]} | {row[5]}|", end="")
+        cursor.execute(f"SELECT member.name FROM member INNER JOIN member_takes_class ON member.id = member_takes_class.member_id WHERE member_takes_class.class_id = {row[0]};")
         for innerRow in cursor.fetchall():
             print(f"{innerRow[0]}, ", end="")
         print()
 
 def get_all_sessions(cursor):
-    cursor.execute(f"SELECT personal_session.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name, member.name \
+    cursor.execute(f"SELECT personal_sesson.id, personal_session.name, room.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name, member.name \
                    FROM personal_session \
                    INNER JOIN trainer ON trainer.id = personal_session.trainer_id \
                    INNER JOIN member ON member.id = personal_session.member_id \
                    INNER JOIN room ON room.id = personal_session.room_id \
                    ORDER BY personal_session.day, personal_session.start_time;")
-    print(f"Personal Sessions this week\n{'Sesson name': ^20}|{'Date': <5}|{'Start': <10}|{'End': <10}|{'Trainer': <20}|{'Member': <15}")
+    print(f"Personal Sessions this week\n{'id': ^4}|{'sesson name': ^20}|{'room': <15}|{'date': <5}|{'start': <10}|{'end': <10}|{'trainer': <20}|{'member': <15}")
     for row in cursor.fetchall():
-        print(f"{row[0]: ^20}|{row[1]: <5}| {row[2]} | {row[3]} |{row[4]: <20}|{row[5]: <15}")
+        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <15}|{row[3]: <5}|{row[4]: <5}| {row[5]} | {row[6]} |{row[7]: <20}|{row[8]: <15}")
+
+def get_all_sessions_by_type(cursor, type, id):
+    other = 'trainer'
+    if(type=='room'):
+        other = 'trainer'
+    cursor.execute(f"SELECT personal_sesson.id, personal_session.name, {other}.name, personal_session.day, personal_session.start_time, personal_session.end_time, member.name \
+                   FROM personal_session \
+                   INNER JOIN trainer ON trainer.id = personal_session.trainer_id \
+                   INNER JOIN member ON member.id = personal_session.member_id \
+                   INNER JOIN room ON room.id = personal_session.room_id \
+                   WHERE personal_session.{type}_id = {id}\
+                   ORDER BY personal_session.day, personal_session.start_time;")
+    print(f"Personal Sessions this week\n{'id': ^4}|{'sesson name': ^20}|{other: <20}|{'date': <5}|{'start': <10}|{'end': <10}|{'member': <15}")
+    for row in cursor.fetchall():
+        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <15}|{row[3]: <5}|{row[4]: <5}| {row[5]} | {row[6]}|{row[7]: <15}")
 
 def check_time_overlap(cursor, s, e, d, id, type, table):
     cursor.execute(f"SELECT * FROM {table} WHERE day = '{d}' AND \
@@ -60,6 +95,10 @@ def add_session(cursor, name, s, e, d, tid, rid):
         return True
     return False
 
+def delete_session(cursor, id):
+    cursor.execute(f"DELETE FROM session WHERE id = {id} and member_id = 1;")
+
+#prints out the id and name of available entities (used for trainer and room)
 def get_available(cursor, s, e, d, table):
     cursor.execute(f"SELECT * FROM {table} WHERE NOT EXISTS( \
                    SELECT * FROM class WHERE day = '{d}' AND \
@@ -75,9 +114,9 @@ def get_available(cursor, s, e, d, table):
         print("-", end="")
     print()
     for row in res:
-        print(f"{row[0]: ^5}|{row[1] : <20}")
+        print(f"{row[0]: ^5}|{row[1] : <30}")
     
-def find_member(cursor, name):
+def find_member_by_name(cursor, name):
     cursor.execute(f"SELECT id FROM member WHERE name = '{name}';")
     res = cursor.fetchall()
     if(res):
