@@ -36,3 +36,8 @@ def get_equipment_by_admin(cursor, id):
         if(row[4]):
             condition = 'good'
         print(f"{row[0]: <4}|{row[1]: <15}|{row[2] + ' ' +row[3]: <20}|{condition}")
+
+def update_equipment_condition(cursor, id, condition):
+    cursor.execute(f"UPDATE equipment\
+                   SET condition = {condition} \
+                    WHERE id = {id};")
