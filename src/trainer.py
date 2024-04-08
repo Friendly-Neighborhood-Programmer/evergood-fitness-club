@@ -12,8 +12,12 @@ def login_trainer(cursor, name, password):
     else:
         return None
 
+#menus
 def trainer_menu():
     print("(1) Schedule Management\n(2) View Member Profile\n(q) Log out")
+
+def schedule_menu():
+    print("(1) View Classes\n(2) View Personal Sessions\n(3) Add Personal Session\n(4)Delete Personal Session\n(q) Back")
 
 def get_all_classes(cursor):
     cursor.execute(f"SELECT class.id, class.name, room.name, class.day, class.start_time, class.end_time, trainer.name \
@@ -121,6 +125,7 @@ def check_time_overlap(cursor, s, e, d, id, type, table):
 def check_overlap_type(cursor, s, e, d, id, type):
     return check_time_overlap(cursor, s, e, d, id, type, "class") or check_time_overlap(cursor, s, e, d, id, type, "personal_session")
 
+#add session, return True if success and False otherwise
 def add_session(cursor, name, s, e, d, tid, rid):
     if (not (check_overlap_type(cursor, s, e, d, tid, 'trainer') or check_overlap_type(cursor, s, e, d, rid, 'room'))):
         cursor.execute(f"INSERT INTO personal_session(name, trainer_id, room_id, member_id, day, start_time, end_time) VALUES\
@@ -128,6 +133,7 @@ def add_session(cursor, name, s, e, d, tid, rid):
         return True
     return False
 
+#delete session from the database with matching id
 def delete_session(cursor, id):
     cursor.execute(f"DELETE FROM session WHERE id = {id} AND member_id = 1;")
 

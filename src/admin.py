@@ -1,4 +1,6 @@
 from trainer import *
+
+#add session, return True if success and False otherwise
 def add_class(cursor, name, s, e, d, tid, rid):
     if (not (check_overlap_type(cursor, s, e, d, tid, 'trainer') or check_overlap_type(cursor, s, e, d, rid, 'room'))):
         cursor.execute(f"INSERT INTO class(name, trainer_id, room_id, day, start_time, end_time) VALUES\
@@ -6,10 +8,12 @@ def add_class(cursor, name, s, e, d, tid, rid):
         return True
     return False
 
+#delete class from the database with matching id
 def delete_class(cursor, id):
     cursor.execute(f"DELETE FROM member_takes_class WHERE member_takes_class.class_id = {id};")
     cursor.execute(f"DELETE FROM class WHERE class.id = {id};")
 
+#Prints out all equipment and relevant information
 def get_all_equipment(cursor):
     cursor.execute(f"SELECT e.id, e.name, r.name, r.id, a.name, e.condition \
                    FROM equipment e \
@@ -23,6 +27,7 @@ def get_all_equipment(cursor):
             condition = 'good'
         print(f"{row[0]: <4}|{row[1]: <15}|{row[2] + ' ' +row[3]: <20}|{row[4]: <20}|{condition}")
 
+#Prints out equipment for a specific admin and relevant information
 def get_equipment_by_admin(cursor, id):
     cursor.execute(f"SELECT e.id, e.name, r.name, r.id, e.condition \
                    FROM equipment e \
