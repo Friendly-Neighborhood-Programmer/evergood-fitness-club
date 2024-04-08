@@ -11,7 +11,7 @@ def delete_class(cursor, id):
     cursor.execute(f"DELETE FROM class WHERE class.id = {id};")
 
 def get_all_equipment(cursor):
-    cursor.execute(f"SELECT e.id, e.name, r.name, r.id a.name, e.condition \
+    cursor.execute(f"SELECT e.id, e.name, r.name, r.id, a.name, e.condition \
                    FROM equipment e \
                    INNER JOIN room r ON r.id = e.room_id \
                    INNER JOIN admin a ON a.id = e.admin_id \
@@ -22,3 +22,17 @@ def get_all_equipment(cursor):
         if(row[5]):
             condition = 'good'
         print(f"{row[0]: <4}|{row[1]: <15}|{row[2] + ' ' +row[3]: <20}|{row[4]: <20}|{condition}")
+
+def get_equipment_by_admin(cursor, id):
+    cursor.execute(f"SELECT e.id, e.name, r.name, r.id, e.condition \
+                   FROM equipment e \
+                   INNER JOIN room r ON r.id = e.room_id \
+                   INNER JOIN admin a ON a.id = e.admin_id \
+                   WHERE a.id = {id} \
+                   ORDER BY r.id;")
+    print(f"Equipment\n{'id': ^4}|{'name': ^15}|{'room': ^20}|{'condition': 8}")
+    for row in cursor.fetchall():
+        condition = 'check in'
+        if(row[4]):
+            condition = 'good'
+        print(f"{row[0]: <4}|{row[1]: <15}|{row[2] + ' ' +row[3]: <20}|{condition}")
