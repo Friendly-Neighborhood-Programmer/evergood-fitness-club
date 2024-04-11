@@ -53,7 +53,13 @@ def viewPersonalInformation(cursor, id):
     res = cursor.fetchall()
 
     if (res):
-        print(res)
+        person = res[0]
+        print(f"Name:    {person[1]}\n" +
+                f"Age:     {person[2]}\n" +
+                f"Address: {person[3]}\n" +
+                f"Phone:   {person[4]}\n" +
+                f"Email:   {person[5]}\n" +
+                f"Paid:    {'Yes' if person[9] else 'No'}\n")
     else:
         print("Could not find personal information.")
 
@@ -81,7 +87,8 @@ def viewGoals(cursor, id):
     res = cursor.fetchall()
 
     if (res):
-        print(res)
+        for i, goal in enumerate(res):
+            print(f"{i+1}. {goal[1]}\n")
     else:
         print("Could not find goals information.")
 
@@ -99,19 +106,37 @@ def createGoal(cursor, id, description):
     
 #prints all metrics entered
 def viewMetrics(cursor, id):
-    cursor.execute(f"SELECT kg FROM weight WHERE weight.member_id = {id};")
+    cursor.execute(f"SELECT kg FROM weight WHERE weight.member_id = {id} ORDER BY id ASC;")
     weights = cursor.fetchall()
-    cursor.execute(f"SELECT count FROM step WHERE step.member_id = {id}")
+    cursor.execute(f"SELECT count FROM step WHERE step.member_id = {id} ORDER BY id ASC;")
     steps = cursor.fetchall()
-    cursor.execute(f"SELECT bpm FROM heartrate WHERE heartrate.member_id = {id}")
-    bpms = cursor.fetchall()
+    cursor.execute(f"SELECT bpm FROM heartrate WHERE heartrate.member_id = {id} ORDER BY id ASC;")
+    heartrates = cursor.fetchall()
 
-    if (weights or steps or bpms):
-        print(weights) if weights else None
-        print(steps) if steps else None
-        print(bpms) if bpms else None
+    if (weights or steps or heartrates):
+        if weights:
+            print("Weights")
+            for kg in weights:
+                print(kg[0])
+
+            print()
+        
+        if steps:
+            print("Steps")
+            for count in steps:
+                print(count[0])
+
+            print()
+
+        if heartrates:
+            print("Heartrates")
+            for bpm in heartrates:
+                print(bpm[0])
+
+            print()
     else:
         print("Could not find metrics information.")
+        print()
 
 #add achievement
 def addAchievement(cursor, id, name):
@@ -130,21 +155,24 @@ def addAchievement(cursor, id, name):
         print(str(e))
         return False
     
-def generateAchievement(id, name, val, min, step):
+def generateAchievement(cursor, id, name, val, min, step):
     if val >= min + 2*step:
-        addAchievement(id, name + '++')
+        addAchievement(cursor, id, name + '++')
     if val >= min + step:
-        addAchievement(id, name + '+')
+        addAchievement(cursor, id, name + '+')
     if val >= min:
-        addAchievement(id, name)
+        addAchievement(cursor, id, name)
     
 #add weight entry, return True if successful, False otherwise
 def addWeight(cursor, id, kg):
     try:
         cursor.execute(f"INSERT INTO weight (kg, member_id) \
-                       VALUES({kg}, {id});")
+                        VALUES({kg}, {id});\
+                        UPDATE member \
+                        SET weight = {kg} \
+                        WHERE id = {id};")
         connection.commit()
-        generateAchievement(id, 'Heavyweight', kg, 100, 50)
+        generateAchievement(cursor, id, 'Heavyweight', kg, 100, 50)
         return True
     
     except Exception as e:
@@ -184,7 +212,9 @@ def viewSelectedRoutine(cursor, id):
     res = cursor.fetchall()
 
     if (res):
-        print(res)
+        routine = res[0]
+        print(f"Routine name: {routine[0]}\n" +
+              f"Description: {routine[1]}\n")
     else:
         print("Could not find routine information.")
 
@@ -208,9 +238,16 @@ def viewAchievements(cursor, id):
     res = cursor.fetchall()
 
     if (res):
-        print(res)
+        for achievement in res:
+            print(achievement[0])
+        print()
     else:
         print("Could not find achievement information.")
+
+def printStats(max, min, avg, units):
+    print(f"Max: {max[0][0]} {units}\n" +
+          f"Min: {min[0][0]} {units}\n" +
+          f"Avg: " + (f"%.2f {units}\n" % avg[0][0] if units != "steps" else f"{avg[0][0]//1} {units}\n"))
 
 def viewWeightStatistics(cursor, id):
     cursor.execute(f"SELECT MAX(kg) FROM weight GROUP BY member_id HAVING member_id = {id};")
@@ -221,9 +258,7 @@ def viewWeightStatistics(cursor, id):
     avg = cursor.fetchall()
 
     if (max or min or avg):
-        print(max) if max else None
-        print(min) if min else None
-        print(avg) if avg else None
+        printStats(max, min, avg, "kg")
     else:
         print("Could not find weight information.")
 
@@ -236,9 +271,7 @@ def viewStepsStatistics(cursor, id):
     avg = cursor.fetchall()
 
     if (max or min or avg):
-        print(max) if max else None
-        print(min) if min else None
-        print(avg) if avg else None
+        printStats(max, min, avg, "steps")
     else:
         print("Could not find steps information.")
 
@@ -251,23 +284,25 @@ def viewHeartrateStatistics(cursor, id):
     avg = cursor.fetchall()
 
     if (max or min or avg):
-        print(max) if max else None
-        print(min) if min else None
-        print(avg) if avg else None
+        printStats(max, min, avg, "bpm")
     else:
         print("Could not find heartrate information.")
 
-def viewHealthStatistics(id):
-    viewWeightStatistics(id)
-    viewStepsStatistics(id)
-    viewHeartrateStatistics(id)
+def viewHealthStatistics(cursor, id):
+    print("Weight Stats:")
+    viewWeightStatistics(cursor, id)
+    print("Steps Stats:")
+    viewStepsStatistics(cursor, id)
+    print("Heartrate Stats:")
+    viewHeartrateStatistics(cursor, id)
+
 
 # UI menus for member
 def trainerMenu():
     print("(1) Profile Management\n(2) Dashboard\n(3) Schedule Management\n(q) Back")
 
 def profileManagementMenu():
-    print("(1) Update Personal Information\n(2) Goals\n(3) Health Metrics\n(q) Back")
+    print("(1) Personal Information\n(2) Goals\n(3) Health Metrics\n(q) Back")
 
 def personalInfoMenu():
     print("(1) View Information\n(2) Update Information")
@@ -286,3 +321,12 @@ def routinesMenu():
     
 if __name__ == "__main__":
     print('test')
+    #addWeight(cursor, 2, 200)
+    #viewPersonalInformation(cursor, 2)
+    #viewGoals(cursor, 2)
+    #viewMetrics(cursor, 2)
+    #viewSelectedRoutine(cursor, 2)
+    #viewAchievements(cursor, 2)
+    #viewWeightStatistics(cursor, 2)
+    #viewHealthStatistics(cursor, 2)
+
