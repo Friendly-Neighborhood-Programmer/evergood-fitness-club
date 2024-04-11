@@ -135,7 +135,11 @@ def add_session(cursor, name, s, e, d, tid, rid):
 
 #delete session from the database with matching id
 def delete_session(cursor, id):
-    cursor.execute(f"DELETE FROM session WHERE id = {id} AND member_id = 1;")
+    try:
+        cursor.execute(f"DELETE FROM session WHERE id = {id} AND member_id = 1;")
+    except Exception as e:
+        print(str(e))
+        return False
 
 #prints out the id and name of available entities (used for trainer and room)
 def get_available(cursor, s, e, d, table):
