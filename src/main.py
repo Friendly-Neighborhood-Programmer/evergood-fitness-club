@@ -11,16 +11,18 @@ def main_loop(db):
             case "1":
                 email = input("Enter your email:")
                 password = input("Enter your password:")
-                if (member.login_member(db.cursor, email, password)):
+                member_id = member.login(db.cursor, email, password)
+                if (member_id):
                     print("Login successful. Welcome back!")
-                    # TODO show member menu
+                    member_menu(member_id)
+
                 else:
                     print("Login failed. Please try again.")     
 
             case "2":
                 data = new_member_prompt(db.cursor)
-                if (member.create(db.cursor, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])):
-                    print("Account created successfully. Welcome to Evergood Fitness!")
+                if (member.createNewMember(db.cursor, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])):
+                    print("Account created successfully. Welcome to the Evergood Fitness Club!")
                 else:
                     print("Account creation failed. Please try again.")
                 
@@ -48,9 +50,9 @@ def login_menu():
     print("(5) Exit")
     return input()
 
-def new_member_prompt(cursor):
+def new_member_prompt(connection, cursor):
     email = input("Enter your email: ")
-    while(member.check_member_email(cursor, email)):
+    while(member.check_email(cursor, email)):
         print("Email already exists. Please enter a different email.")
         email = input("Enter your email: ")
     password = input("Enter your password: ")
@@ -61,6 +63,24 @@ def new_member_prompt(cursor):
     height = input("Enter your height: ")
     weight = input("Enter your weight: ")
     return (name, password, age, weight, height, phone, address, email)
+
+def member_menu():
+    member.memberMenu()
+    member_choice = input()
+
+    while (member_choice != 'q'):
+        match member_choice:
+            case "1":
+                member.profileManagementMenu()
+            case "2":
+                member.dashboardMenu()
+            case "3":
+                member.healthMetricsMenu()
+            case "q":
+                print("Logging out.")
+                break
+            case _:
+                print("Invalid option. Please try again.")
 
 def main():
     # get database login information from file 

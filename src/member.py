@@ -1,27 +1,9 @@
-import psycopg2
-import sys
-
-# Connect to the A3 database
-def connect():
-    con = psycopg2.connect(
-        dbname="test 8",
-        user="postgres",
-        password="postgres",
-        host="localhost",
-        port="5432"
-    ) 
-    return (con, con.cursor())
-
-# Global connection and cursor objects
-(connection, cursor) = connect()
-
-#connection.autocommit = True
-
 #returns True if successful, False otherwise
-def createNewMember(cursor, name, password, age, weight, height, phone, address, email):
+def createNewMember(connection, cursor, name, password, age, weight, height, phone, address, email):
     try:
         cursor.execute(f"INSERT INTO member (name, password, age, weight, height, phone, address, email) \
                        VALUES('{name}', '{password}', {age}, {weight}, {height}, '{phone}', '{address}', '{email}');")
+        connection.commit()
         return True
     
     except Exception as e:
@@ -33,9 +15,9 @@ def check_email(cursor, email):
     cursor.execute(f"SELECT * FROM member WHERE email = '{email}';")
     return len(cursor.fetchall())
 
-def check_phone(cursor, email):
-    cursor.execute(f"SELECT * FROM member WHERE email = '{email}';")
-    return len(cursor.fetchall())
+# def check_phone(cursor, email):
+#     cursor.execute(f"SELECT * FROM member WHERE email = '{email}';")
+#     return len(cursor.fetchall())
 
 # returns member id if successful, None otherwise
 def login(cursor, email, password):
@@ -93,11 +75,12 @@ def viewGoals(cursor, id):
         print("Could not find goals information.")
 
 #add a goal for a user, return True if successful, False otherwise
-def createGoal(cursor, id, description):
+def createGoal(connection, cursor, id, description):
     try:
         cursor.execute(f"INSERT INTO goal (description, member_id)\
                        VALUES ('{description}', {id})")
         print("Successfully added goal.")
+        connection.commit()
         return True
     
     except Exception as e:
@@ -139,7 +122,7 @@ def viewMetrics(cursor, id):
         print()
 
 #add achievement
-def addAchievement(cursor, id, name):
+def addAchievement(connection, cursor, id, name):
     try:
         cursor.execute(f"INSERT INTO achievement (name, member_id) \
                         SELECT '{name}', {id}\
@@ -164,7 +147,7 @@ def generateAchievement(cursor, id, name, val, min, step):
         addAchievement(cursor, id, name)
     
 #add weight entry, return True if successful, False otherwise
-def addWeight(cursor, id, kg):
+def addWeight(connection, cursor, id, kg):
     try:
         cursor.execute(f"INSERT INTO weight (kg, member_id) \
                         VALUES({kg}, {id});\
@@ -180,7 +163,7 @@ def addWeight(cursor, id, kg):
         return False
 
 #add steps entry, return True if successful, False otherwise
-def addSteps(cursor, id, count):
+def addSteps(connection, cursor, id, count):
     try:
         cursor.execute(f"INSERT INTO step (count, member_id) \
                        VALUES({count}, {id});")
@@ -193,7 +176,7 @@ def addSteps(cursor, id, count):
         return False
 
 #add heartrate entry, return True if successful, False otherwise
-def addHeartrate(cursor, id, bpm):
+def addHeartrate(connection, cursor, id, bpm):
     try:
         cursor.execute(f"INSERT INTO heartrate (bpm, member_id) \
                        VALUES({bpm}, {id});")
@@ -218,7 +201,7 @@ def viewSelectedRoutine(cursor, id):
     else:
         print("Could not find routine information.")
 
-def changeSelectedRoutine(cursor, id, routine_id):
+def changeSelectedRoutine(connection, cursor, id, routine_id):
     try:
         cursor.execute(f"UPDATE member\
                         SET routine_id = {routine_id}\
@@ -298,11 +281,11 @@ def viewHealthStatistics(cursor, id):
 
 
 # UI menus for member
-def trainerMenu():
-    print("(1) Profile Management\n(2) Dashboard\n(3) Schedule Management\n(q) Back")
+def memberMenu():
+    print("(1) Profile Management\n(2) Dashboard\n(3) Schedule Management\n(q) Logout")
 
 def profileManagementMenu():
-    print("(1) Personal Information\n(2) Goals\n(3) Health Metrics\n(q) Back")
+    print("(1) Update Personal Information\n(2) Fitness Goals\n(3) Health Metrics\n(q) Back")
 
 def personalInfoMenu():
     print("(1) View Information\n(2) Update Information")
