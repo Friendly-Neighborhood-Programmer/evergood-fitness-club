@@ -128,15 +128,20 @@ def check_overlap_type(cursor, s, e, d, id, type):
 #add session, return True if success and False otherwise
 def add_session(cursor, name, s, e, d, tid, rid):
     if (not (check_overlap_type(cursor, s, e, d, tid, 'trainer') or check_overlap_type(cursor, s, e, d, rid, 'room'))):
-        cursor.execute(f"INSERT INTO personal_session(name, trainer_id, room_id, member_id, day, start_time, end_time) VALUES\
+        try:
+            cursor.execute(f"INSERT INTO personal_session(name, trainer_id, room_id, member_id, day, start_time, end_time) VALUES\
                        ('{name}', {tid}, {rid}, 1, '{d}', '{s}', '{e}');")
-        return True
+            return True
+        except Exception as e:
+            print(str(e))
+            return False
     return False
 
 #delete session from the database with matching id
 def delete_session(cursor, id):
     try:
         cursor.execute(f"DELETE FROM session WHERE id = {id} AND member_id = 1;")
+        return True
     except Exception as e:
         print(str(e))
         return False

@@ -1,17 +1,26 @@
 from trainer import *
 
 #add session, return True if success and False otherwise
-def add_class(cursor, name, s, e, d, tid, rid):
+def add_class(connection, cursor, name, s, e, d, tid, rid):
     if (not (check_overlap_type(cursor, s, e, d, tid, 'trainer') or check_overlap_type(cursor, s, e, d, rid, 'room'))):
-        cursor.execute(f"INSERT INTO class(name, trainer_id, room_id, day, start_time, end_time) VALUES\
+        try:
+            cursor.execute(f"INSERT INTO class(name, trainer_id, room_id, day, start_time, end_time) VALUES\
                        ('{name}', {tid}, {rid}, '{d}', '{s}', '{e}');")
-        return True
+            connection.commit()
+            return True
+        except Exception as e:
+            print(str(e))
+            return False
     return False
 
 #delete class from the database with matching id
-def delete_class(cursor, id):
-    cursor.execute(f"DELETE FROM member_takes_class WHERE member_takes_class.class_id = {id};")
-    cursor.execute(f"DELETE FROM class WHERE class.id = {id};")
+def delete_class(connection, cursor, id):
+    try:
+        cursor.execute(f"DELETE FROM member_takes_class WHERE member_takes_class.class_id = {id};")
+        cursor.execute(f"DELETE FROM class WHERE class.id = {id};")
+        connection.commit()
+    except Exception as e:
+        print(str(e))
 
 #Prints out all equipment and relevant information
 def get_all_equipment(cursor):
@@ -42,7 +51,13 @@ def get_equipment_by_admin(cursor, id):
             condition = 'good'
         print(f"{row[0]: <4}|{row[1]: <15}|{row[2] + ' ' +row[3]: <20}|{condition}")
 
-def update_equipment_condition(cursor, id, condition):
-    cursor.execute(f"UPDATE equipment\
-                   SET condition = {condition} \
-                    WHERE id = {id};")
+def update_equipment_condition(connection, cursor, id, condition):
+    try:
+        cursor.execute(f"UPDATE equipment\
+                    SET condition = {condition} \
+                        WHERE id = {id};")
+        connection.commit()
+        return True
+    except Exception as e:
+        print(str(e))
+        return False    
