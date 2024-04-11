@@ -19,6 +19,9 @@ def trainer_menu():
 def schedule_menu():
     print("(1) View Classes\n(2) View Personal Sessions\n(3) Add Personal Session\n(4)Delete Personal Session\n(q) Back")
 
+def view_member_menu():
+    print("(1) View Goals\n(2) View Metrics\n(3) View Routines\n(3) View Classes\n(4) View Personal Sessions\n(q) Back")
+
 def get_all_classes(cursor):
     cursor.execute(f"SELECT class.id, class.name, room.name, class.day, class.start_time, class.end_time, trainer.name \
                    FROM class \
