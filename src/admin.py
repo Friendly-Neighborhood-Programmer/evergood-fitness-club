@@ -45,12 +45,12 @@ def get_equipment_by_admin(cursor, id):
                    INNER JOIN admin a ON a.id = e.admin_id \
                    WHERE a.id = {id} \
                    ORDER BY r.id;")
-    print(f"Equipment\n{'id': ^4}|{'name': ^15}|{'room': ^20}|{'condition': 8}")
+    print(f"Equipment\n{'id': ^4}|{'name': ^30}|{'room': ^20}|{'condition': ^8}")
     for row in cursor.fetchall():
         condition = 'check in'
         if(row[4]):
             condition = 'good'
-        print(f"{row[0]: <4}|{row[1]: <15}|{row[2] + ' ' +row[3]: <20}|{condition}")
+        print(f"{row[0]: <4}|{row[1]: <30}|{row[2] + ' ' +str(row[3]): <20}|{condition}")
 
 def update_equipment_condition(connection, cursor, id, condition):
     try:
