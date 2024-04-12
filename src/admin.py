@@ -1,4 +1,5 @@
 from trainer import *
+import trainer
 
 #add session, return True if success and False otherwise
 def add_class(connection, cursor, name, s, e, d, tid, rid):
@@ -61,3 +62,31 @@ def update_equipment_condition(connection, cursor, id, condition):
     except Exception as e:
         print(str(e))
         return False    
+    
+def get_all_classes(cursor):
+    trainer.get_all_classes(cursor)
+
+def get_available_rooms_for_class(cursor, class_id):
+    cursor.execute(f"SELECT * FROM class WHERE id = {class_id}")
+    res = cursor.fetchall()
+
+    class_info = res[0]
+
+    if (class_info):
+        return trainer.get_available(cursor, class_info[3], class_info[4], class_info[2], 'room')
+    else:
+        print("No available rooms for that time")
+        return []
+
+def change_class_room(connection, cursor, class_id, room_id, available_rooms):
+    if room_id in available_rooms:
+        try:
+            cursor.execute(f"UPDATE class SET room_id = {room_id} WHERE id = {class_id};")
+
+            connection.commit()
+            return True
+        except Exception as e:
+            print(str(e))
+
+    return False
+

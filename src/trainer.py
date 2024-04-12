@@ -160,12 +160,17 @@ def get_available(cursor, s, e, d, table):
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
                    end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {table}_id = {table}.id);")
     res = cursor.fetchall()
+    available_ids = []
     print(f"Available {table}s on {d} from {s} to {e}\n{'id': ^5}|{'name': <30}")
     for i in range(25):
         print("-", end="")
     print()
     for row in res:
         print(f"{row[0]: ^5}|{row[1] : <30}")
+        available_ids.append(row[0])
+
+    return available_ids
+
     
 def find_member_by_name(cursor, name):
     cursor.execute(f"SELECT id FROM member WHERE name = '{name}';")
