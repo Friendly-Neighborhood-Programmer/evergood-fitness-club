@@ -1,6 +1,16 @@
 from trainer import *
 import trainer
 
+# returns member id if successful, None otherwise
+def login(cursor, name, password):
+    cursor.execute(f"SELECT admin.id FROM admin WHERE name = '{name}' AND password = '{password}';")
+    res = cursor.fetchall()
+    
+    if (res):
+        return res[0][0]
+    else:
+        return None
+    
 #add session, return True if success and False otherwise
 def add_class(connection, cursor, name, s, e, d, tid, rid):
     if (not (check_overlap_type(cursor, s, e, d, tid, 'trainer') or check_overlap_type(cursor, s, e, d, rid, 'room'))):
