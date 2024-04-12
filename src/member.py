@@ -1,3 +1,4 @@
+import trainer
 #returns True if successful, False otherwise
 def createNewMember(connection, cursor, name, password, age, weight, height, phone, address, email):
     try:
@@ -301,6 +302,80 @@ def dashboardMenu():
 
 def routinesMenu():
     print("(1) Change Routine")
+
+def enroll_in_class(connection, cursor, mid, cid):
+    cursor.execute(f"SELECT start_time, end_time, day \
+                   FROM class\
+                   WHERE id = {cid}")
+    res = cursor.fetchall()
+    s_time, e_time, day = "", "", ""
+    if(res):
+        (s_time, e_time, day) = res[0]
+    else:
+        return False
+    if(not check_member_overlap(cursor, mid, s_time, e_time, day)):
+        try:
+            cursor.execute(f"INSERT INTO member_takes_class(member_id, class_id) VALUES ({mid}, {cid});")
+            connection.commit()
+            return True
+        except Exception as e:
+            print(str(e)) 
+            return False
+    return False
+
+def schedule_session(connection, cursor, mid, sid):
+    cursor.execute(f"SELECT start_time, end_time, day \
+                   FROM personal_session\
+                   WHERE id = {sid} AND member_id = 1")
+    res = cursor.fetchall()
+    s_time, e_time, day = "", "", ""
+    if(res):
+        (s_time, e_time, day) = res[0]
+    else:
+        return False
+    if(not check_member_overlap(cursor, mid, s_time, e_time, day)):
+        try:
+            cursor.execute(f"UPDATE personal_session \
+                           SET member_id = {mid} \
+                            WHERE id = {sid};")
+            connection.commit()
+            return True
+        except Exception as e:
+            print(str(e)) 
+            return False
+    return False
+
+def unschedule_session(connection, cursor, mid, sid):
+    try:
+            cursor.execute(f"UPDATE personal_session \
+                           SET member_id = 1 \
+                            WHERE id = {sid} AND member_id = {mid};")
+            connection.commit()
+            return True
+    except Exception as e:
+        print(str(e)) 
+        return False       
+    
+def check_member_overlap(cursor, mid, s, e, d):
+    cursor.execute(f"SELECT * \
+                   FROM personal_session \
+                   WHERE (day = '{d}') AND (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND end_time >= '{e}' OR start_time > '{s}' AND end_time < '{e}') AND member_id = {mid};")
+    if(cursor.fetchall()):
+        return True
+    cursor.execute(f"SELECT * \
+                   FROM class \
+                   WHERE EXISTS (\
+                   SELECT *\
+                   FROM member_takes_class AS takes\
+                   WHERE (takes.class_id = class.id) AND (takes.member_id = {mid}) AND day = '{d}' AND ((start_time <= '{s}' AND end_time > '{s}') OR (start_time < '{e}' AND end_time >= '{e}') OR (start_time > '{s}' AND end_time < '{e}'))\
+                   );\
+                   ")
+    if(cursor.fetchall()):
+        return True
+    return False
+
+def get_available_sessions(cursor):
+    trainer.get_sessions_by_member(cursor, 1)
     
 if __name__ == "__main__":
     print('test')
@@ -312,4 +387,3 @@ if __name__ == "__main__":
     #viewAchievements(cursor, 2)
     #viewWeightStatistics(cursor, 2)
     #viewHealthStatistics(cursor, 2)
-

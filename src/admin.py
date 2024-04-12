@@ -40,12 +40,12 @@ def get_all_equipment(cursor):
                    INNER JOIN room r ON r.id = e.room_id \
                    INNER JOIN admin a ON a.id = e.admin_id \
                    ORDER BY r.id;")
-    print(f"All equipment\n{'id': ^4}|{'name': ^15}|{'room': ^20}|{'admin': ^20}|{'condition': 8}")
+    print(f"All equipment\n{'id': ^4}|{'name': ^30}|{'room': ^20}|{'admin': ^20}|{'condition': ^8}")
     for row in cursor.fetchall():
         condition = 'check in'
         if(row[5]):
             condition = 'good'
-        print(f"{row[0]: <4}|{row[1]: <15}|{row[2] + ' ' +row[3]: <20}|{row[4]: <20}|{condition}")
+        print(f"{row[0]: <4}|{row[1]: <30}|{row[2] + ' ' +str(row[3]): <20}|{row[4]: <20}|{condition}")
 
 #Prints out equipment for a specific admin and relevant information
 def get_equipment_by_admin(cursor, id):
@@ -55,12 +55,12 @@ def get_equipment_by_admin(cursor, id):
                    INNER JOIN admin a ON a.id = e.admin_id \
                    WHERE a.id = {id} \
                    ORDER BY r.id;")
-    print(f"Equipment\n{'id': ^4}|{'name': ^15}|{'room': ^20}|{'condition': 8}")
+    print(f"Equipment\n{'id': ^4}|{'name': ^30}|{'room': ^20}|{'condition': ^8}")
     for row in cursor.fetchall():
         condition = 'check in'
         if(row[4]):
             condition = 'good'
-        print(f"{row[0]: <4}|{row[1]: <15}|{row[2] + ' ' +row[3]: <20}|{condition}")
+        print(f"{row[0]: <4}|{row[1]: <30}|{row[2] + ' ' +str(row[3]): <20}|{condition}")
 
 def update_equipment_condition(connection, cursor, id, condition):
     try:
