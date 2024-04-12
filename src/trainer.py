@@ -77,7 +77,7 @@ def get_classes_by_member(cursor, id):
         print()
 
 def get_all_sessions(cursor):
-    cursor.execute(f"SELECT personal_sesson.id, personal_session.name, room.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name, member.name \
+    cursor.execute(f"SELECT personal_session.id, personal_session.name, room.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name, member.name \
                    FROM personal_session \
                    INNER JOIN trainer ON trainer.id = personal_session.trainer_id \
                    INNER JOIN member ON member.id = personal_session.member_id \
@@ -85,15 +85,15 @@ def get_all_sessions(cursor):
                    ORDER BY personal_session.day, personal_session.start_time;")
     print(f"Personal Sessions this week\n{'id': ^4}|{'sesson name': ^20}|{'room': <15}|{'date': <5}|{'start': <10}|{'end': <10}|{'trainer': <20}|{'member': <15}")
     for row in cursor.fetchall():
-        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <15}|{row[3]: <5}|{row[4]: <5}| {row[5]} | {row[6]} |{row[7]: <20}|{row[8]: <15}")
+        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <15}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <20}|{row[7]: <15}")
 
 
 #get sessions by type (use for trainer or room)
 def get_sessions_by_type(cursor, id, type):
-    other = 'trainer'
+    other = 'room'
     if(type=='room'):
         other = 'trainer'
-    cursor.execute(f"SELECT personal_sesson.id, personal_session.name, {other}.name, personal_session.day, personal_session.start_time, personal_session.end_time, member.name \
+    cursor.execute(f"SELECT personal_session.id, personal_session.name, {other}.name, personal_session.day, personal_session.start_time, personal_session.end_time, member.name \
                    FROM personal_session \
                    INNER JOIN trainer ON trainer.id = personal_session.trainer_id \
                    INNER JOIN member ON member.id = personal_session.member_id \
@@ -102,7 +102,7 @@ def get_sessions_by_type(cursor, id, type):
                    ORDER BY personal_session.day, personal_session.start_time;")
     print(f"Personal Sessions this week\n{'id': ^4}|{'sesson name': ^20}|{other: <20}|{'date': <5}|{'start': <10}|{'end': <10}|{'member': <15}")
     for row in cursor.fetchall():
-        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <15}|{row[3]: <5}|{row[4]: <5}| {row[5]} | {row[6]}|{row[7]: <15}")
+        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <20}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <15}")
 
 def get_sessions_by_member(cursor, id):
     cursor.execute(f"SELECT personal_sesson.id, personal_session.name, room.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name \
