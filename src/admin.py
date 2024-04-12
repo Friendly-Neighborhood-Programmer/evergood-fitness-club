@@ -61,7 +61,18 @@ def update_equipment_condition(connection, cursor, id, condition):
         return True
     except Exception as e:
         print(str(e))
-        return False    
+        return False   
+
+def member_pay_bill(connection, cursor, member_id):
+    try:
+        cursor.execute(f"UPDATE member\
+                        SET paid = true \
+                        WHERE id = {member_id};")
+        connection.commit()
+        return True
+    except Exception as e:
+        print(str(e))
+        return False 
     
 def get_all_classes(cursor):
     trainer.get_all_classes(cursor)
