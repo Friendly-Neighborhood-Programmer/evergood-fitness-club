@@ -3,7 +3,7 @@ CREATE TYPE DAY AS ENUM ('SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT');
 CREATE TABLE admin
     (id         SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
-    password    TEXT NOT NULL 
+    password    TEXT NOT NULL,
         CHECK (char_length(password) >= 8 AND char_length(password) <= 32));
 
 CREATE TABLE room
