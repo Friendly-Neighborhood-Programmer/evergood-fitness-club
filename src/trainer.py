@@ -105,7 +105,7 @@ def get_sessions_by_type(cursor, id, type):
         print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <20}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <15}")
 
 def get_sessions_by_member(cursor, id):
-    cursor.execute(f"SELECT personal_sesson.id, personal_session.name, room.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name \
+    cursor.execute(f"SELECT personal_session.id, personal_session.name, room.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name \
                    FROM personal_session \
                    INNER JOIN trainer ON trainer.id = personal_session.trainer_id \
                    INNER JOIN member ON member.id = personal_session.member_id \
@@ -114,7 +114,7 @@ def get_sessions_by_member(cursor, id):
                    ORDER BY personal_session.day, personal_session.start_time;")
     print(f"Personal Sessions this week\n{'id': ^4}|{'sesson name': ^20}|{'room': <15}|{'date': <5}|{'start': <10}|{'end': <10}|{'trainer': <20}")
     for row in cursor.fetchall():
-        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <15}|{row[3]: <5}|{row[4]: <5}| {row[5]} | {row[6]} |{row[7]: <20}")
+        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <15}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <20}")
 
 def check_time_overlap(cursor, s, e, d, id, type, table):
     cursor.execute(f"SELECT * FROM {table} WHERE day = '{d}' AND \

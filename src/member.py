@@ -1,3 +1,4 @@
+import trainer
 #returns True if successful, False otherwise
 def createNewMember(connection, cursor, name, password, age, weight, height, phone, address, email):
     try:
@@ -321,6 +322,39 @@ def enroll_in_class(connection, cursor, mid, cid):
             print(str(e)) 
             return False
     return False
+
+def schedule_session(connection, cursor, mid, sid):
+    cursor.execute(f"SELECT start_time, end_time, day \
+                   FROM personal_session\
+                   WHERE id = {sid} AND member_id = 1")
+    res = cursor.fetchall()
+    s_time, e_time, day = "", "", ""
+    if(res):
+        (s_time, e_time, day) = res[0]
+    else:
+        return False
+    if(not check_member_overlap(cursor, mid, s_time, e_time, day)):
+        try:
+            cursor.execute(f"UPDATE personal_session \
+                           SET member_id = {mid} \
+                            WHERE id = {sid};")
+            connection.commit()
+            return True
+        except Exception as e:
+            print(str(e)) 
+            return False
+    return False
+
+def unschedule_session(connection, cursor, mid, sid):
+    try:
+            cursor.execute(f"UPDATE personal_session \
+                           SET member_id = 1 \
+                            WHERE id = {sid} AND member_id = {mid};")
+            connection.commit()
+            return True
+    except Exception as e:
+        print(str(e)) 
+        return False       
     
 def check_member_overlap(cursor, mid, s, e, d):
     cursor.execute(f"SELECT * \
@@ -339,6 +373,9 @@ def check_member_overlap(cursor, mid, s, e, d):
     if(cursor.fetchall()):
         return True
     return False
+
+def get_available_sessions(cursor):
+    trainer.get_sessions_by_member(cursor, 1)
     
 if __name__ == "__main__":
     print('test')
