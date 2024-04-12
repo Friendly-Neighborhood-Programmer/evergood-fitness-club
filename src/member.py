@@ -312,7 +312,6 @@ def enroll_in_class(connection, cursor, mid, cid):
         (s_time, e_time, day) = res[0]
     else:
         return False
-    print(s_time, e_time, day)
     if(not check_member_overlap(cursor, mid, s_time, e_time, day)):
         try:
             cursor.execute(f"INSERT INTO member_takes_class(member_id, class_id) VALUES ({mid}, {cid});")
@@ -326,7 +325,7 @@ def enroll_in_class(connection, cursor, mid, cid):
 def check_member_overlap(cursor, mid, s, e, d):
     cursor.execute(f"SELECT * \
                    FROM personal_session \
-                   WHERE day = '{d}' AND (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND end_time >= '{e}' OR start_time > '{s}' AND end_time < '{e}') AND member_id = {mid};")
+                   WHERE (day = '{d}') AND (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND end_time >= '{e}' OR start_time > '{s}' AND end_time < '{e}') AND member_id = {mid};")
     if(cursor.fetchall()):
         return True
     cursor.execute(f"SELECT * \
@@ -334,7 +333,7 @@ def check_member_overlap(cursor, mid, s, e, d):
                    WHERE EXISTS (\
                    SELECT *\
                    FROM member_takes_class AS takes\
-                   WHERE takes.class_id = class.id AND takes.member_id = {mid} AND ((start_time <= '{s}' AND end_time > '{s}') OR (start_time < '{e}' AND end_time >= '{e}') OR (start_time > '{s}' AND end_time < '{e}'))\
+                   WHERE (takes.class_id = class.id) AND (takes.member_id = {mid}) AND day = '{d}' AND ((start_time <= '{s}' AND end_time > '{s}') OR (start_time < '{e}' AND end_time >= '{e}') OR (start_time > '{s}' AND end_time < '{e}'))\
                    );\
                    ")
     if(cursor.fetchall()):
