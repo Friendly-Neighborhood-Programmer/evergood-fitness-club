@@ -84,7 +84,7 @@ def member_menu():
 
 def main():
     # get database login information from file 
-    dbinfo = database.get_from_file("db.txt")
+    dbinfo = database.get_from_file("../db.txt")
     # establish database connection
     db = database.Database(dbinfo)
     # start program CLI

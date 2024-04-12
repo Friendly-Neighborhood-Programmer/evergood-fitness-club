@@ -62,7 +62,7 @@ def get_classes_by_member(cursor, id):
                    WHERE EXISTS(\
                    SELECT * \
                    FROM member_takes_class t \
-                   WHERE c.id = t.class_id and t.member_id = {id})
+                   WHERE c.id = t.class_id and t.member_id = {id}) \
                    ORDER BY c.day, c.start_time;")
     print(f"Classes this week\n{'id': ^4}|{'class name': ^30}|{'room': <15}|{'date': <5}|{'start': <10}|{'end': <10}|{'trainer': <20}|registered")
     res = cursor.fetchall()
