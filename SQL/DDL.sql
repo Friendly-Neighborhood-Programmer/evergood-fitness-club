@@ -71,6 +71,12 @@ CREATE TABLE heartrate
 	member_id INT,
 	FOREIGN KEY (member_id) REFERENCES member(id));
 
+CREATE TABLE achievement
+    (id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    member_id INT,
+    FOREIGN KEY (member_id) REFERENCES member(id));
+
 CREATE TABLE trainer
     (id         SERIAL PRIMARY KEY,
 	name        TEXT NOT NULL,

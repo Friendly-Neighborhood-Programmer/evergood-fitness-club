@@ -36,6 +36,7 @@ def viewPersonalInformation(cursor, id):
     res = cursor.fetchall()
 
     if (res):
+        print("Your Information:")
         person = res[0]
         print(f"Name:    {person[1]}\n" +
                 f"Age:     {person[2]}\n" +
@@ -47,7 +48,7 @@ def viewPersonalInformation(cursor, id):
         print("Could not find personal information.")
 
 #updates member name, age, address, phone, email, password
-def updatePersonalInformation(cursor, id, updateMap):
+def updatePersonalInformation(connection, cursor, id, updateMap):
     try:
         for (key, value) in updateMap.items():
             if key == 'age':
@@ -57,7 +58,8 @@ def updatePersonalInformation(cursor, id, updateMap):
             else:
                 cursor.execute(f"UPDATE member\
 	                        SET {key} = '{value}'\
-	                        WHERE id = {id}")
+	                        WHERE id = {id}")   
+            connection.commit()
         return True
                 
     except Exception as e:
@@ -70,8 +72,9 @@ def viewGoals(cursor, id):
     res = cursor.fetchall()
 
     if (res):
+        print("Your Goals:")
         for i, goal in enumerate(res):
-            print(f"{i+1}. {goal[1]}\n")
+            print(f"{i+1}. {goal[1]}")
     else:
         print("Could not find goals information.")
 
@@ -98,24 +101,25 @@ def viewMetrics(cursor, id):
     heartrates = cursor.fetchall()
 
     if (weights or steps or heartrates):
+        print("Your Metrics:")
         if weights:
             print("Weights")
             for kg in weights:
-                print(kg[0])
+                print(kg[0] + " kg")
 
             print()
         
         if steps:
             print("Steps")
             for count in steps:
-                print(count[0])
+                print(count[0] + " steps")
 
             print()
 
         if heartrates:
             print("Heartrates")
             for bpm in heartrates:
-                print(bpm[0])
+                print(bpm[0] + " bpm")
 
             print()
     else:
@@ -139,13 +143,13 @@ def addAchievement(connection, cursor, id, name):
         print(str(e))
         return False
     
-def generateAchievement(cursor, id, name, val, min, step):
+def generateAchievement(connection, cursor, id, name, val, min, step):
     if val >= min + 2*step:
-        addAchievement(cursor, id, name + '++')
+        addAchievement(connection, cursor, id, name + '++')
     if val >= min + step:
-        addAchievement(cursor, id, name + '+')
+        addAchievement(connection, cursor, id, name + '+')
     if val >= min:
-        addAchievement(cursor, id, name)
+        addAchievement(connection, cursor, id, name)
     
 #add weight entry, return True if successful, False otherwise
 def addWeight(connection, cursor, id, kg):
@@ -156,7 +160,7 @@ def addWeight(connection, cursor, id, kg):
                         SET weight = {kg} \
                         WHERE id = {id};")
         connection.commit()
-        generateAchievement(cursor, id, 'Heavyweight', kg, 100, 50)
+        generateAchievement(connection, cursor, id, 'Heavyweight', kg, 100, 50)
         return True
     
     except Exception as e:
@@ -169,7 +173,7 @@ def addSteps(connection, cursor, id, count):
         cursor.execute(f"INSERT INTO step (count, member_id) \
                        VALUES({count}, {id});")
         connection.commit()
-        generateAchievement(id, 'Trekker', count, 20000, 5000)
+        generateAchievement(connection, cursor, id, 'Trekker', count, 20000, 5000)
         return True
     
     except Exception as e:
@@ -182,7 +186,7 @@ def addHeartrate(connection, cursor, id, bpm):
         cursor.execute(f"INSERT INTO heartrate (bpm, member_id) \
                        VALUES({bpm}, {id});")
         connection.commit()
-        generateAchievement(id, "Pump", bpm, 100, 25)
+        generateAchievement(connection, cursor, id, "Pump", bpm, 100, 25)
         return True
     
     except Exception as e:
@@ -286,7 +290,7 @@ def memberMenu():
     print("(1) Profile Management\n(2) Dashboard\n(3) Schedule Management\n(q) Logout")
 
 def profileManagementMenu():
-    print("(1) Update Personal Information\n(2) Fitness Goals\n(3) Health Metrics\n(q) Back")
+    print("(1) Manage Personal Information\n(2) Manage Fitness Goals\n(3) Manage Health Metrics\n(q) Back")
 
 def personalInfoMenu():
     print("(1) View Information\n(2) Update Information")
@@ -301,7 +305,7 @@ def dashboardMenu():
     print("(1) Routines\n(2) Achievements\n(3) Health Statistics(q) Back")
 
 def routinesMenu():
-    print("(1) Change Routine")
+    print("(1) View Current Routine\n(2) Change Routine")
 
 def enroll_in_class(connection, cursor, mid, cid):
     cursor.execute(f"SELECT start_time, end_time, day \
