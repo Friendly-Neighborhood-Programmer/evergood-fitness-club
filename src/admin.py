@@ -60,12 +60,12 @@ def get_equipment_by_admin(cursor, id):
         condition = 'check in'
         if(row[4]):
             condition = 'good'
-        print(f"{row[0]: <4}|{row[1]: <30}|{row[2] + ' ' +str(row[3]): <20}|{condition}")
+        print(f"{row[0]: ^4}|{row[1]: ^30}|{row[2] + ' ' +str(row[3]): ^20}|{condition: ^8}")
 
 def update_equipment_condition(connection, cursor, id, condition):
     try:
         cursor.execute(f"UPDATE equipment\
-                    SET condition = {condition} \
+                    SET condition = {bool(int(condition))} \
                         WHERE id = {id};")
         connection.commit()
         return True
@@ -85,7 +85,7 @@ def member_pay_bill(connection, cursor, member_id):
         return False 
     
 def get_all_classes(cursor):
-    trainer.get_all_classes(cursor)
+    return trainer.get_all_classes(cursor)
 
 def get_available_rooms_for_class(cursor, class_id):
     cursor.execute(f"SELECT * FROM class WHERE id = {class_id}")
@@ -100,7 +100,7 @@ def get_available_rooms_for_class(cursor, class_id):
         return []
 
 def change_class_room(connection, cursor, class_id, room_id, available_rooms):
-    if room_id in available_rooms:
+    if int(room_id) in available_rooms:
         try:
             cursor.execute(f"UPDATE class SET room_id = {room_id} WHERE id = {class_id};")
 
