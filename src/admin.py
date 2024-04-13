@@ -84,6 +84,20 @@ def member_pay_bill(connection, cursor, member_id):
         print(str(e))
         return False 
     
+def show_unpaid_members(connection, cursor):
+    cursor.execute(f"SELECT member.id, member.name FROM member WHERE NOT member.paid;")
+
+    print(f"Unpaid Members\n{'id': ^4}|{'name': ^30}")
+    for row in cursor.fetchall():
+        print(f"{row[0]: ^4}|{row[1]: ^30}")
+
+def show_paid_members(connection, cursor):
+    cursor.execute(f"SELECT member.id, member.name FROM member WHERE member.paid;")
+    
+    print(f"Paid Members\n{'id': ^4}|{'name': ^30}")
+    for row in cursor.fetchall():
+        print(f"{row[0]: ^4}|{row[1]: ^30}")
+
 def get_all_classes(cursor):
     return trainer.get_all_classes(cursor)
 
