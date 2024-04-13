@@ -192,6 +192,13 @@ def addHeartrate(connection, cursor, id, bpm):
     except Exception as e:
         print(str(e))
         return False
+    
+def viewAllRoutines(cursor):
+    cursor.execute(f"SELECT routine.id, routine.name FROM routine")
+
+    print(f"Routines\n{'id': ^4}|{'name': ^30}")
+    for row in cursor.fetchall():
+        print(f"{row[0]: ^4}|{row[1]: ^30}")
 
 def viewSelectedRoutine(cursor, id):
     cursor.execute(f"SELECT routine.name, description\
