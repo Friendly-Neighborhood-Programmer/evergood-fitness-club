@@ -20,8 +20,10 @@ python src/main.py
 and follow the UI prompts on screen to do what you need to
 
 Documentation:
-[ER-Diagram.jpeg]
-[Relation-Diagram.jpeg]
+![ER-Diagram](https://github.com/Friendly-Neighborhood-Programmer/evergood-fitness-club/assets/96633176/a18aae28-4bc2-4176-903e-b49b1ed320f9)
+
+![ER-Schema](https://github.com/Friendly-Neighborhood-Programmer/evergood-fitness-club/assets/96633176/c94d2e3b-f3aa-4b1d-a5ba-01b89f17c57b)
+
 
 Passwords:
 Isaac Robert - 12345678
