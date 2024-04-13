@@ -39,6 +39,7 @@ def main_loop(db):
                 name = input("Enter your name: ")
                 password = input("Enter your password: ")
                 admin_hash.update(password.encode())
+                password = admin_hash.hexdigest()
                 admin_id = admin.login(db.cursor, name, password)
                 if (admin_id):
                     print("Login successful. Welcome back!")
