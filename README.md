@@ -1,12 +1,13 @@
 # evergood-fitness-club
 An CLI application with full PostgreSQL integration, providing users, trainer, and admins control over their journey at the Evergood Fitness Club
 
+## Steps To Run
 install these dependencies before running:
 ```
 pip install psycopg2
 ```
 
-create a txt file named 'db.txt' containing your PostgreSQL details and credentials
+create a txt file named 'db.txt' in the root directory containing your PostgreSQL details and credentials
 with the format:
 ```
 dbname, user, password, host, port
