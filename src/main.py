@@ -20,7 +20,7 @@ def main_loop(db):
 
             case "2":
                 data = new_member_prompt(db.con, db.cursor)
-                if (member.createNewMember(db.cursor, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])):
+                if (member.createNewMember(db.con, db.cursor, data[0], data[1], data[2], data[3], data[4], data[5], data[6])):
                     print("Account created successfully. Welcome to the Evergood Fitness Club!")
                 else:
                     print("Account creation failed. Please try again.")
