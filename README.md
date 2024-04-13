@@ -1,6 +1,8 @@
 # evergood-fitness-club
 An CLI application with full PostgreSQL integration, providing users, trainer, and admins control over their journey at the Evergood Fitness Club
 
+link to youtube demo video: https://www.youtube.com/watch?v=AO5oeES8XUw
+
 ## Steps To Run
 install these dependencies before running:
 ```
