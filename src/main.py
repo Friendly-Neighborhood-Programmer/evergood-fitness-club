@@ -36,7 +36,7 @@ def main_loop(db):
                 
             case "4":
                 admin_hash = hashlib.sha256()
-                email = input("Enter your email: ")
+                name = input("Enter your name: ")
                 password = input("Enter your password: ")
                 admin_hash.update(password.encode())
                 admin_id = admin.login(db.cursor, name, password)
