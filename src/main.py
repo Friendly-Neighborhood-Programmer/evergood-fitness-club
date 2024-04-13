@@ -35,11 +35,11 @@ def main_loop(db):
                     trainer_menu(db, trainer_id)
                 
             case "4":
-                admin_hash = hashlib.sha256()
+                admin_hash = hashlib.blake2b()
                 name = input("Enter your name: ")
                 password = input("Enter your password: ")
-                password = ''.join(format(x, 'b') for x in bytearray(password, 'utf-8'))
-                admin_hash.update(password)
+                #password = ''.join(format(x, 'b') for x in bytearray(password.strip(), 'utf-8'))
+                admin_hash.update(password.encode())
                 password = admin_hash.hexdigest()
                 print(password)
                 admin_id = admin.login(db.cursor, name, password)
