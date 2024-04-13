@@ -90,7 +90,7 @@ def prompt_for_member(db, trainer_id):
         member_name = input("Enter the name of the member you want to view: ")
         member_id = trainer.find_member_by_name(db.cursor, member_name)
 
-    view_member_menu(db, trainer_id)
+    view_member_menu(db, member_id)
 
 def schedule_menu(db, trainer_id):
     trainer.schedule_menu()
