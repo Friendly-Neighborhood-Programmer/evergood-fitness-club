@@ -6,16 +6,16 @@ INSERT INTO admin (name, password) VALUES
     ('hand yolo', 'lmnopqrs');
 
 INSERT INTO room (name, admin_id) VALUES 
-    ('sauna', 1),
-    ('free weights', 1),
-    ('circuits room', 2),
-    ('machine room', 3),
-    ('machine room', 3),
-    ('cardio room', 4),
-    ('cardio room', 4),
-    ('training room', 5),
-    ('training room', 5),
-    ('training room', 5);
+    ('sauna 1', 1),
+    ('free weights 1', 1),
+    ('circuits room 1', 2),
+    ('machine room 1', 3),
+    ('machine room 2', 3),
+    ('cardio room 1', 4),
+    ('cardio room 2', 4),
+    ('training room 1', 5),
+    ('training room 2', 5),
+    ('training room 3', 5);
 
 INSERT INTO equipment (name, room_id, admin_id) VALUES
     ('dumbbells (10)', 2, 1),
