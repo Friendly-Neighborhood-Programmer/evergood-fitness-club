@@ -36,8 +36,7 @@ CREATE TABLE member
     address     TEXT NOT NULL,
     phone       TEXT NOT NULL UNIQUE,
     email       TEXT NOT NULL UNIQUE,
-    weight      NUMERIC(5, 2) NOT NULL,
-    height      NUMERIC(5, 2) NOT NULL,
+    gender      TEXT,
     bill_amount NUMERIC(5,2) DEFAULT 250,
     paid        BOOLEAN DEFAULT FALSE,
     password    TEXT NOT NULL 
