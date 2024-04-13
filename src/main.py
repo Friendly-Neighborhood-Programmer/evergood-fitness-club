@@ -158,9 +158,8 @@ def new_member_prompt(connection, cursor):
     address = input("Enter your address: ")
     phone = input("Enter your phone: ")
     age = input("Enter your age: ")
-    height = input("Enter your height: ")
-    weight = input("Enter your weight: ")
-    return (name, password, age, weight, height, phone, address, email)
+    gender = input("Enter your gender: ")
+    return (name, password, age, phone, address, email, gender)
 
 def member_menu(db, member_id):
     member.memberMenu()
@@ -282,7 +281,7 @@ def personal_information_menu(db, member_id):
             case "1":
                 member.viewPersonalInformation(db.cursor, member_id)
             case "2":
-                details = prompt_for_personal_information(db, member_id)
+                details = prompt_for_personal_information(db)
                 member.updatePersonalInformation(db.con, db.cursor, member_id, details)
             case "q":
                 print("Returning to profile management menu.")
@@ -337,7 +336,7 @@ def metric_menu(db, member_id):
         print("\n(1) View All Metrics\n(2) Enter Weight\n(3) Enter Steps\n(4) Enter Workout Heartrate\n(q) Back")
         metric_choice = input()
 
-def prompt_for_personal_information(db, member_id):
+def prompt_for_personal_information(db):
     details = {}
     details["email"] = input("Enter your email: ")
     while(member.check_email(db.cursor, details["email"])):
@@ -348,6 +347,7 @@ def prompt_for_personal_information(db, member_id):
     details["address"] = input("Enter your address: ")
     details["phone"] = input("Enter your phone: ")
     details["age"] = input("Enter your age: ")
+    details["gender"] = input("Enter your gender: ")
 
     return details
 
@@ -455,7 +455,7 @@ def class_manage_menu(db, admin_id):
 
 def main():
     # get database login information from file 
-    dbinfo = database.get_from_file()
+    dbinfo = database.get_from_file('../db.txt')
     # establish database connection
     db = database.Database(dbinfo)
     # start program CLI
