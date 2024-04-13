@@ -26,13 +26,21 @@ Documentation:
 
 
 Passwords:
+
+## member
 Isaac Robert - 12345678
+
 Rachel Stewart - 12345678
 
+## trainer
 lance lift - bigmuscles
+
 tina treadmill - I<3running
+
 max muscle - gains4days
+
 holly heartbeat - 95bpmandlovingit
 
-bob feta - 12345678
-bob feta - 12345678
+## all admin
+12345678
+
