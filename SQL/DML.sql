@@ -120,6 +120,7 @@ INSERT INTO personal_session(name, trainer_id, room_id, member_id, day, start_ti
 
 INSERT INTO member_takes_class(member_id, class_id) VALUES
     (2, 1),
-    (2, 2),
     (3, 2),
+    (3, 4),
+    (2, 5),
     (2, 3);
