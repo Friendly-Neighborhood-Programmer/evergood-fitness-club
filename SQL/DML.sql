@@ -1,9 +1,9 @@
 INSERT INTO admin (name, password) VALUES 
     ('bob feta', 'f5560c3296de4e0ef868574bf96fc778bc580931a8cae2d2631de27ba055db1be2afd769d658c684d8bc5ee0c1b2a7583ec862d5e994b806c6fa2ab4d54cd7f4'),
-    ('prince lee', 'abcdefgh'),
-    ('one kobe', 'qwertyui'),
-    ('paul patten', '98765432'),
-    ('hand yolo', 'lmnopqrs');
+    ('prince lee', 'f5560c3296de4e0ef868574bf96fc778bc580931a8cae2d2631de27ba055db1be2afd769d658c684d8bc5ee0c1b2a7583ec862d5e994b806c6fa2ab4d54cd7f4'),
+    ('one kobe', 'f5560c3296de4e0ef868574bf96fc778bc580931a8cae2d2631de27ba055db1be2afd769d658c684d8bc5ee0c1b2a7583ec862d5e994b806c6fa2ab4d54cd7f4'),
+    ('paul patten', 'f5560c3296de4e0ef868574bf96fc778bc580931a8cae2d2631de27ba055db1be2afd769d658c684d8bc5ee0c1b2a7583ec862d5e994b806c6fa2ab4d54cd7f4'),
+    ('hand yolo', 'f5560c3296de4e0ef868574bf96fc778bc580931a8cae2d2631de27ba055db1be2afd769d658c684d8bc5ee0c1b2a7583ec862d5e994b806c6fa2ab4d54cd7f4');
 
 INSERT INTO room (name, admin_id) VALUES 
     ('sauna', 1),
@@ -62,7 +62,7 @@ INSERT INTO routine (name, description) VALUES
 INSERT INTO member (name, password, age, phone, gender, address, email, bill_amount, paid, routine_id) VALUES
     ('Dummy', '00000000', 0, '0', 'D', '0', 'dummy@gmail.com', 250, TRUE, 1),
     ('Isaac Robert', 'f5560c3296de4e0ef868574bf96fc778bc580931a8cae2d2631de27ba055db1be2afd769d658c684d8bc5ee0c1b2a7583ec862d5e994b806c6fa2ab4d54cd7f4', 30, '613-613-6133', 'M', '1 Malvern Street', 'isaac@gmail.com', 250, FALSE, 1),
-    ('Rachel Steward', '12345678', 30, '613-613-6134', 'G', '2 Malvern Street', 'rachel@gmail.com', 250, FALSE, 1);
+    ('Rachel Steward', 'f5560c3296de4e0ef868574bf96fc778bc580931a8cae2d2631de27ba055db1be2afd769d658c684d8bc5ee0c1b2a7583ec862d5e994b806c6fa2ab4d54cd7f4', 30, '613-613-6134', 'G', '2 Malvern Street', 'rachel@gmail.com', 250, FALSE, 1);
 
 INSERT INTO goal (description, member_id) VALUES
     ('BECOME BIG STRONG MAN', 1),
@@ -85,9 +85,9 @@ VALUES
 
 INSERT INTO trainer (name, password, specialty) VALUES
     ('lance lift', '14cc017f334adb77daf82bfab6213fe43a60c10a61fbe5226aba9aa6976dd81a77ee7117e9c8595d8c21740aa893055362d0273e727cfb5da219443481309d86', 'deadlifts'),
-    ('tina treadmill', 'I<3running', 'cardio machines'),
-    ('max muscle', 'gains4days', 'weight machines'),
-    ('holly heartbeat', '95bpmandlovingit', 'zumba');
+    ('tina treadmill', 'cbb04abd48d29072438bca22ced360b60478c954da603ab2ecbee79d37139c65be41a85a6b09c4ae31dc12138fbe0e2e68dfe34e49ec51edea06bcb4fb77a958', 'cardio machines'),
+    ('max muscle', '66c305d4349dff59c4e5cd698e007328fb413bf244638e9331c7105488f85d25ddd7eca5b6cab46e48f0db007c6503b0cab34fb63955f7705866e0725f131b31', 'weight machines'),
+    ('holly heartbeat', '6d02c705f9ae722a928db1b9414431ffcc2491890b6675d30a9c7eb25375ac172bdcd0f22d5e0c2de988f5b44eb70fd49d1432cb490683b9cf0b0393bb420c70', 'zumba');
 
 INSERT INTO class(name, trainer_id, room_id, day, start_time, end_time) VALUES
     ('CycleCraze Spin Studio', 2, 6, 'SUN', '07:00:00', '08:00:00'),

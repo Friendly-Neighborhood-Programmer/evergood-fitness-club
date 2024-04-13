@@ -22,3 +22,15 @@ and follow the UI prompts on screen to do what you need to
 Documentation:
 [ER-Diagram.jpeg]
 [Relation-Diagram.jpeg]
+
+Passwords:
+Isaac Robert - 12345678
+Rachel Stewart - 12345678
+
+lance lift - bigmuscles
+tina treadmill - I<3running
+max muscle - gains4days
+holly heartbeat - 95bpmandlovingit
+
+bob feta - 12345678
+bob feta - 12345678
