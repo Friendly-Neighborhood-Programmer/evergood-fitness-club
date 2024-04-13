@@ -41,7 +41,7 @@ def main_loop(db):
                     print("Login successful. Welcome back!")
                     admin_menu(db, admin_id) 
 
-            case "5":
+            case "q":
                 print("Goodbye!")
                 break
 
@@ -54,7 +54,7 @@ def login_menu():
     print("(2) Sign up as new user")
     print("(3) Login as trainer")
     print("(4) Login as admin")
-    print("(5) Exit")
+    print("(q) Exit")
     return input()
 
 def trainer_menu(db, trainer_id):
