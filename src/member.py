@@ -1,9 +1,9 @@
 import trainer
 #returns True if successful, False otherwise
-def createNewMember(connection, cursor, name, password, age, weight, height, phone, address, email):
+def createNewMember(connection, cursor, name, password, age, phone, address, email, gender):
     try:
-        cursor.execute(f"INSERT INTO member (name, password, age, weight, height, phone, address, email) \
-                       VALUES('{name}', '{password}', {age}, {weight}, {height}, '{phone}', '{address}', '{email}');")
+        cursor.execute(f"INSERT INTO member (name, password, age, phone, address, email, gender) \
+                       VALUES('{name}', '{password}', {age}, '{phone}', '{address}', '{email}', '{gender}');")
         connection.commit()
         return True
     
@@ -43,7 +43,8 @@ def viewPersonalInformation(cursor, id):
                 f"Address: {person[3]}\n" +
                 f"Phone:   {person[4]}\n" +
                 f"Email:   {person[5]}\n" +
-                f"Paid:    {'Yes' if person[9] else 'No'}\n")
+                f"Gender:  {person[6]}\n" +
+                f"Paid:    {'Yes' if person[8] else 'No'}\n")
     else:
         print("Could not find personal information.")
 

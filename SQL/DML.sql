@@ -59,10 +59,10 @@ INSERT INTO routine (name, description) VALUES
     ('Aerobics', 'Jumping Jacks - 100, Skipping - 100, Burpees - 100'),
     ('Arms', 'Biceps Curls - 3 x 8, Skull Crushers - 3 x 12, Face Pulls - 3 x 10, Pushups - 30');
 
-INSERT INTO member (name, password, age, weight, height, phone, address, email, bill_amount, paid, routine_id) VALUES
-    ('Dummy', '00000000', 0, 0, 0, '0', '0', 'dummy@gmail.com', 250, TRUE, 1),
-    ('Isaac Robert', '12345678', 30, 170, 170, '613-613-6133', '1 Malvern Street', 'isaac@gmail.com', 250, FALSE, 1),
-    ('Rachel Steward', '12345678', 30, 140, 140, '613-613-6134', '2 Malvern Street', 'rachel@gmail.com', 250, FALSE, 1);
+INSERT INTO member (name, password, age, phone, gender, address, email, bill_amount, paid, routine_id) VALUES
+    ('Dummy', '00000000', 0, '0', 'D', '0', 'dummy@gmail.com', 250, TRUE, 1),
+    ('Isaac Robert', '12345678', 30, '613-613-6133', 'M', '1 Malvern Street', 'isaac@gmail.com', 250, FALSE, 1),
+    ('Rachel Steward', '12345678', 30, '613-613-6134', 'G', '2 Malvern Street', 'rachel@gmail.com', 250, FALSE, 1);
 
 INSERT INTO goal (description, member_id) VALUES
     ('BECOME BIG STRONG MAN', 1),
