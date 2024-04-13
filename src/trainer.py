@@ -23,15 +23,15 @@ def view_member_menu():
     print("(1) View Goals\n(2) View Metrics\n(3) View Routines\n(3) View Classes\n(4) View Personal Sessions\n(q) Back")
 
 def get_all_classes(cursor):
-    cursor.execute(f"SELECT class.id, class.name, room.name, class.day, class.start_time, class.end_time, trainer.name \
+    cursor.execute(f"SELECT class.id, class.name, room.name, class.day, class.start_time, class.end_time, trainer.name, room.id \
                    FROM class \
                    INNER JOIN trainer ON trainer.id = class.trainer_id \
                    INNER JOIN room ON room.id = class.room_id \
                    ORDER BY class.day, class.start_time;")
-    print(f"Classes this week\n{'id': ^4}|{'class name': ^30}|{'room': <15}|{'date': <5}|{'start': <10}|{'end': <10}|{'trainer': <20}|registered")
+    print(f"Classes this week\n{'id': ^4}|{'class name': ^30}|{'room': <20}|{'date': <5}|{'start': <10}|{'end': <10}|{'trainer': <20}|registered")
     res = cursor.fetchall()
     for row in res:
-        print(f"{row[0]: <4}|{row[1]: <30}|{row[2]: <15}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <20}|", end="")
+        print(f"{row[0]: <4}|{row[1]: <30}|{row[2] + ' ' + str(row[7]): <20}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <20}|", end="")
         cursor.execute(f"SELECT member.name FROM member INNER JOIN member_takes_class ON member.id = member_takes_class.member_id WHERE member_takes_class.class_id = {row[0]};")
         for innerRow in cursor.fetchall():
             print(f"{innerRow[0]}, ", end="")
