@@ -458,7 +458,7 @@ def class_manage_menu(db, admin_id):
 
 def main():
     # get database login information from file 
-    dbinfo = database.get_from_file('../db.txt')
+    dbinfo = database.get_from_file()
     # establish database connection
     db = database.Database(dbinfo)
     # start program CLI
