@@ -2,6 +2,7 @@ import database
 import member
 import trainer
 import admin
+import hashlib
 
 def main_loop(db):
     while(True):
@@ -34,8 +35,10 @@ def main_loop(db):
                     trainer_menu(db, trainer_id)
                 
             case "4":
-                name = input("Enter your name: ")
+                admin_hash = hashlib.sha256()
+                email = input("Enter your email: ")
                 password = input("Enter your password: ")
+                admin_hash.update(password.encode())
                 admin_id = admin.login(db.cursor, name, password)
                 if (admin_id):
                     print("Login successful. Welcome back!")

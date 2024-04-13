@@ -1,5 +1,5 @@
 INSERT INTO admin (name, password) VALUES 
-    ('bob feta', '12345678'),
+    ('bob feta', 'f5560c3296de4e0ef868574bf96fc778bc580931a8cae2d2631de27ba055db1be2afd769d658c684d8bc5ee0c1b2a7583ec862d5e994b806c6fa2ab4d54cd7f4'),
     ('prince lee', 'abcdefgh'),
     ('one kobe', 'qwertyui'),
     ('paul patten', '98765432'),
