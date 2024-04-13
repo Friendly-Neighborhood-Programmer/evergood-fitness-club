@@ -1,6 +1,4 @@
-import psycopg2
-import sys
-#TODO: import Member file
+#TODO: format data to be in middle and consistent spacing
 
 #returns trainer id if successful and none otherwise
 def login_trainer(cursor, name, password):
@@ -12,15 +10,15 @@ def login_trainer(cursor, name, password):
     else:
         return None
 
-#menus
+# trainermenus
 def trainer_menu():
-    print("(1) Schedule Management\n(2) View Member Profile\n(q) Log out")
+    print("\n(1) Schedule Management\n(2) View Member Profile\n(q) Log out")
 
 def schedule_menu():
-    print("(1) View Classes\n(2) View Personal Sessions\n(3) Add Personal Session\n(4)Delete Personal Session\n(q) Back")
+    print("\n(1) View Classes\n(2) View Personal Sessions\n(3) Add Personal Session\n(4) Delete Personal Session\n(q) Back")
 
 def view_member_menu():
-    print("(1) View Goals\n(2) View Metrics\n(3) View Routines\n(3) View Classes\n(4) View Personal Sessions\n(q) Back")
+    print("\n(1) View Goals\n(2) View Metrics\n(3) View Routines\n(4) View Classes\n(5) View Personal Sessions\n(q) Back")
 
 def get_all_classes(cursor):
     cursor.execute(f"SELECT class.id, class.name, room.name, class.day, class.start_time, class.end_time, trainer.name, room.id \
@@ -83,9 +81,9 @@ def get_all_sessions(cursor):
                    INNER JOIN member ON member.id = personal_session.member_id \
                    INNER JOIN room ON room.id = personal_session.room_id \
                    ORDER BY personal_session.day, personal_session.start_time;")
-    print(f"Personal Sessions this week\n{'id': ^4}|{'sesson name': ^20}|{'room': <15}|{'date': <5}|{'start': <10}|{'end': <10}|{'trainer': <20}|{'member': <15}")
+    print(f"Personal Sessions this week\n{'id': ^4}|{'session': ^16}|{'room': <15}|{'date': <5}|{'start': <10}|{'end': <10}|{'trainer': <20}|{'member': <15}")
     for row in cursor.fetchall():
-        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <15}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <20}|{row[7]: <15}")
+        print(f"{row[0]: <4}|{row[1]: <16}|{row[2]: <15}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <20}|{row[7]: <15}")
 
 
 #get sessions by type (use for trainer or room)
@@ -100,9 +98,9 @@ def get_sessions_by_type(cursor, id, type):
                    INNER JOIN room ON room.id = personal_session.room_id \
                    WHERE personal_session.{type}_id = {id}\
                    ORDER BY personal_session.day, personal_session.start_time;")
-    print(f"Personal Sessions this week\n{'id': ^4}|{'sesson name': ^20}|{other: <20}|{'date': <5}|{'start': <10}|{'end': <10}|{'member': <15}")
+    print(f"Personal Sessions this week\n{'id': ^4}|{'session': ^16}|{other: <20}|{'date': <5}|{'start': <10}|{'end': <10}|{'member': <15}")
     for row in cursor.fetchall():
-        print(f"{row[0]: <4}|{row[1]: <20}|{row[2]: <20}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <15}")
+        print(f"{row[0]: <4}|{row[1]: <16}|{row[2]: <20}|{row[3]: <5}| {row[4]} | {row[5]} |{row[6]: <15}")
 
 def get_sessions_by_member(cursor, id):
     cursor.execute(f"SELECT personal_session.id, personal_session.name, room.name, personal_session.day, personal_session.start_time, personal_session.end_time, trainer.name \
@@ -141,9 +139,9 @@ def add_session(cursor, name, s, e, d, tid, rid):
     return False
 
 #delete session from the database with matching id
-def delete_session(cursor, id):
+def delete_session(cursor, id, tid):
     try:
-        cursor.execute(f"DELETE FROM session WHERE id = {id} AND member_id = 1;")
+        cursor.execute(f"DELETE FROM personal_session WHERE id = {id} AND member_id = 1 AND trainer_id = {tid};")
         return True
     except Exception as e:
         print(str(e))

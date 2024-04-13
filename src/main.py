@@ -15,7 +15,6 @@ def main_loop(db):
                 if (member_id):
                     print("Login successful. Welcome back!")
                     member_menu(db, member_id)
-
                 else:
                     print("Login failed. Please try again.")     
 
@@ -27,8 +26,12 @@ def main_loop(db):
                     print("Account creation failed. Please try again.")
                 
             case "3":
-                # todo trainer login
-                print("Trainer login unimplemented.")
+                name = input("Enter your name: ")
+                password = input("Enter your password: ")
+                trainer_id = trainer.login_trainer(db.cursor, name, password)
+                if (trainer_id):
+                    print("Login successful. Welcome back!")
+                    trainer_menu(db, trainer_id)
                 
             case "4":
                 name = input("Enter your name: ")
@@ -37,7 +40,6 @@ def main_loop(db):
                 if (admin_id):
                     print("Login successful. Welcome back!")
                     admin_menu(db, admin_id) 
-
 
             case "5":
                 print("Goodbye!")
@@ -54,6 +56,97 @@ def login_menu():
     print("(4) Login as admin")
     print("(5) Exit")
     return input()
+
+def trainer_menu(db, trainer_id):
+    trainer.trainer_menu()
+    trainer_choice = input()
+
+    while (trainer_choice != 'q'):
+        match trainer_choice:
+            case "1":
+                schedule_menu(db, trainer_id)
+            case "2":
+                prompt_for_member(db, trainer_id)
+            case "q":
+                print("Logging out.")
+                break
+            case _:
+                print("Invalid option. Please try again.")
+
+        trainer.trainer_menu()
+        trainer_choice = input()
+
+def prompt_for_member(db, trainer_id):
+    # TODO: debug trainer viewing member menu not working
+    print("Here are all your classes and sessions and the members enrolled in them: ")
+    trainer.get_classes_by_type(db.cursor, trainer_id, 'trainer')
+    print()
+    trainer.get_sessions_by_type(db.cursor, trainer_id, 'trainer')
+    
+    member_name = input("Enter the name of the member you want to view: ")
+    member_id = trainer.find_member_by_name(db.cursor, member_name)
+    while (not member_id):
+        print("Member not found. Please try again.")
+        member_name = input("Enter the name of the member you want to view: ")
+        member_id = trainer.find_member_by_name(db.cursor, member_name)
+
+    view_member_menu(db, trainer_id)
+
+def schedule_menu(db, trainer_id):
+    trainer.schedule_menu()
+    schedule_choice = input()
+
+    while (schedule_choice != 'q'):
+        match schedule_choice:
+            case "1":
+                trainer.get_classes_by_type(db.cursor, trainer_id, 'trainer')
+            case "2":
+                trainer.get_sessions_by_type(db.cursor, trainer_id, 'trainer')
+            case "3":
+                session_name = input("Enter the name of the session: ")
+                day = input("Enter the day of the session: ")
+                start_time = input("Enter the start time of the session: ")
+                end_time = input("Enter the end time of the session: ")
+                trainer.get_available(db.cursor, start_time, end_time, day, 'room')
+                room_id = input("Enter the ID of the room for the class: ")
+                trainer.add_session(db.cursor, session_name, start_time, end_time, day, trainer_id, room_id)
+            case "4":
+                trainer.get_sessions_by_type(db.cursor, trainer_id, 'trainer')
+                session_id = input("Enter the ID of the session you want to delete: ")
+                trainer.delete_session(db.cursor, session_id, trainer_id)
+            case "q":
+                print("Returning to trainer menu.")
+                break
+            case _:
+                print("Invalid option. Please try again.")
+
+        trainer.schedule_menu()
+        schedule_choice = input()
+
+def view_member_menu(db, member_id):
+    trainer.view_member_menu()
+    member_choice = input()
+
+    while (member_choice != 'q'):
+        match member_choice:
+            case "1":
+                member.viewGoals(db.cursor, member_id)
+            case "2":
+                member.viewMetrics(db.cursor, member_id)
+            case "3":
+                member.viewSelectedRoutine(db.cursor, member_id)
+            case "4":
+                trainer.get_classes_by_member(db.cursor, member_id)
+            case "5":
+                trainer.get_sessions_by_member(db.cursor, member_id)
+            case "q":
+                print("Returning to trainer menu.")
+                break
+            case _:
+                print("Invalid option. Please try again.")
+
+        trainer.view_member_menu()
+        member_choice = input()
 
 def new_member_prompt(connection, cursor):
     email = input("Enter your email: ")
@@ -78,9 +171,9 @@ def member_menu(db, member_id):
             case "1":
                 profile_management_menu(db, member_id)
             case "2":
-                dashboard_menu
+                dashboard_menu(db, member_id)
             case "3":
-                member._______()
+                schedule_management_menu(db, member_id)
             case "q":
                 print("Logging out.")
                 break
@@ -89,6 +182,35 @@ def member_menu(db, member_id):
 
         member.memberMenu()
         member_choice = input()
+
+def schedule_management_menu(db, member_id):
+    print("\n(1) View Enrolled Fitness-Classes\n(2) View Enrolled Personal Sessions \
+          \n(3) Register for Fitness-Class\n(4) Register for Personal Session\n(q) Back")
+    schedule_choice = input()
+
+    while (schedule_choice != 'q'):
+        match schedule_choice:
+            case "1":
+                trainer.get_classes_by_member(db.cursor, member_id)
+            case "2":
+                trainer.get_sessions_by_member(db.cursor, member_id)
+            case "3":
+                trainer.get_all_classes(db.cursor)
+                class_id = input("Enter the ID of the class you want to register for: ")
+                member.enroll_in_class(db.con, db.cursor, member_id, class_id)
+            case "4":
+                member.get_available_sessions(db.cursor)
+                session_id = input("Enter the ID of the session you want to register for: ")
+                member.schedule_session(db.con, db.cursor, member_id, session_id)
+            case "q":
+                print("Returning to member menu.")
+                break
+            case _:
+                print("Invalid option. Please try again.")
+
+        print("\n(1) View Enrolled Fitness-Classes\n(2) View Enrolled Personal Sessions \
+              \n(3) Register for Fitness-Class\n(4) Register for Personal Session\n(q) Back")
+        schedule_choice = input()
 
 def profile_management_menu(db, member_id):
     member.profileManagementMenu()
@@ -118,7 +240,7 @@ def dashboard_menu(db, member_id):
     while (dashboard_choice != 'q'):
         match dashboard_choice:
             case "1":
-                
+                routine_menu(db, member_id)
             case "2":
                 member.viewAchievements(db.cursor, member_id)
             case "3":
@@ -141,7 +263,7 @@ def routine_menu(db, member_id):
             case "1":
                 member.viewSelectedRoutine(db.cursor, member_id)
             case "2":
-                member.(db.cursor)
+                member.viewAllRoutines(db.cursor)
                 routine_id = input("Enter the ID of the new routine you want to select: ")
                 member.changeSelectedRoutine(db.con, db.cursor, member_id, routine_id)
             case "q":

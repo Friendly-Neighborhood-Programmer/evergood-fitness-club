@@ -309,7 +309,7 @@ def healthMetricsMenu():
     print("(1) View All Metrics\n(2) Enter weight\n(3) Enter steps\n (4) Enter heartrate")
 
 def dashboardMenu():
-    print("(1) Routines\n(2) Achievements\n(3) Health Statistics(q) Back")
+    print("(1) Routines\n(2) Achievements\n(3) Health Statistics\n(q) Back")
 
 def routinesMenu():
     print("(1) View Current Routine\n(2) Change Routine")
