@@ -4,23 +4,27 @@ An CLI application with full PostgreSQL integration, providing users, trainer, a
 link to youtube demo video: https://www.youtube.com/watch?v=AO5oeES8XUw
 
 ## Steps To Run
-install these dependencies before running:
+Install these dependencies before running:
 ```
 pip install psycopg2
 ```
 
-create a txt file named 'db.txt' in the root directory containing your PostgreSQL details and credentials
+Make sure you have pgAdmin4 setup with your database
+
+Create a txt file named 'db.txt' in the root directory containing your PostgreSQL details and credentials
 with the format:
 ```
 dbname, user, password, host, port
 ```
 
-in the root directory run 
+Open and run the DDL.sql and DML.sql using the pgAdmin GUI
+
+In the root directory of the project run 
 ```
 python src/main.py
 ```
 
-and follow the UI prompts on screen to do what you need to
+follow the UI prompts on screen to do what you need to
 
 Documentation:
 ![ER-Diagram](https://github.com/Friendly-Neighborhood-Programmer/evergood-fitness-club/assets/96633176/a18aae28-4bc2-4176-903e-b49b1ed320f9)
