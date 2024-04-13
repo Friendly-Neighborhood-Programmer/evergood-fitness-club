@@ -38,8 +38,10 @@ def main_loop(db):
                 admin_hash = hashlib.sha256()
                 name = input("Enter your name: ")
                 password = input("Enter your password: ")
-                admin_hash.update(password.encode())
+                password = ''.join(format(x, 'b') for x in bytearray(password, 'utf-8'))
+                admin_hash.update(password)
                 password = admin_hash.hexdigest()
+                print(password)
                 admin_id = admin.login(db.cursor, name, password)
                 if (admin_id):
                     print("Login successful. Welcome back!")
