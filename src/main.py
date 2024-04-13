@@ -89,3 +89,11 @@ def main():
     db = database.Database(dbinfo)
     # start program CLI
     main_loop(db)
+    
+
+#admin.get_all_classes(db.cursor)
+#available_room = admin.get_available_rooms_for_class(db.cursor, 1)
+#admin.member_pay_bill(db.con, db.cursor, 2)
+#member.viewPersonalInformation(db.cursor, 2)
+#admin.change_class_room(db.con, db.cursor, 1, 6, available_room)
+#admin.change_class_room(db.con, db.cursor, 1, 7, available_room)
