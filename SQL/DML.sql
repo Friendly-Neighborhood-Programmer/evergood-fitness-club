@@ -56,7 +56,8 @@ INSERT INTO equipment (name, room_id, admin_id) VALUES
 
 INSERT INTO routine (name, description) VALUES
     ('Whole Body Workout', 'Bicep Curls - 3 x 8, Tricep Pushdown - 3 x 8, Chest Fly - 3 x 8, Rear Delt Fly - 3 x 8, Barbell Squat - 3 x 8, Lat Pulldown - 3 x 8'),
-    ('Aerobics', 'Jumping Jacks - 100, Skipping - 100, Burpees - 100');
+    ('Aerobics', 'Jumping Jacks - 100, Skipping - 100, Burpees - 100'),
+    ('Arms', 'Biceps Curls - 3 x 8, Skull Crushers - 3 x 12, Face Pulls - 3 x 10, Pushups - 30');
 
 INSERT INTO member (name, password, age, weight, height, phone, address, email, bill_amount, paid, routine_id) VALUES
     ('Dummy', '00000000', 0, 0, 0, '0', '0', 'dummy@gmail.com', 250, TRUE, 1),
