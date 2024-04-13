@@ -41,7 +41,7 @@ def main_loop(db):
                     print("Login successful. Welcome back!")
                     admin_menu(db, admin_id) 
 
-            case "5":
+            case "q":
                 print("Goodbye!")
                 break
 
@@ -54,7 +54,7 @@ def login_menu():
     print("(2) Sign up as new user")
     print("(3) Login as trainer")
     print("(4) Login as admin")
-    print("(5) Exit")
+    print("(q) Exit")
     return input()
 
 def trainer_menu(db, trainer_id):
@@ -90,7 +90,7 @@ def prompt_for_member(db, trainer_id):
         member_name = input("Enter the name of the member you want to view: ")
         member_id = trainer.find_member_by_name(db.cursor, member_name)
 
-    view_member_menu(db, trainer_id)
+    view_member_menu(db, member_id)
 
 def schedule_menu(db, trainer_id):
     trainer.schedule_menu()

@@ -149,7 +149,10 @@ def delete_session(cursor, id, tid):
 
 #prints out the id and name of available entities (used for trainer and room)
 def get_available(cursor, s, e, d, table):
-    cursor.execute(f"SELECT * FROM {table} WHERE NOT EXISTS( \
+    added = ""
+    if(table=="trainer"):
+        added = ", specialty"
+    cursor.execute(f"SELECT id, name{added} FROM {table} WHERE NOT EXISTS( \
                    SELECT * FROM class WHERE day = '{d}' AND \
                    (start_time <= '{s}' AND end_time > '{s}' OR start_time < '{e}' AND \
                    end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {table}_id = {table}.id)\
@@ -160,11 +163,15 @@ def get_available(cursor, s, e, d, table):
     res = cursor.fetchall()
     available_ids = []
     print(f"Available {table}s on {d} from {s} to {e}\n{'id': ^5}|{'name': <30}")
-    for i in range(25):
-        print("-", end="")
-    print()
+    if(table=="trainer"):
+        print(f"Available {table}s on {d} from {s} to {e}\n{'id': ^5}|{'name': <30}|{'specialty': <20}")
+    else:
+        print(f"Available {table}s on {d} from {s} to {e}\n{'id': ^5}|{'name': <30}")
     for row in res:
-        print(f"{row[0]: ^5}|{row[1] : <30}")
+        if(table=="trainer"):
+            print(f"{row[0]: ^5}|{row[1] : <30}|{row[2] : <20}")
+        else:
+            print(f"{row[0]: ^5}|{row[1] : <30}")
         available_ids.append(row[0])
 
     return available_ids
