@@ -105,12 +105,11 @@ def get_available_rooms_for_class(cursor, class_id):
     cursor.execute(f"SELECT * FROM class WHERE id = {class_id}")
     res = cursor.fetchall()
 
-    class_info = res[0]
-
-    if (class_info):
+    if (res):
+        class_info = res[0]
         return trainer.get_available(cursor, class_info[3], class_info[4], class_info[2], 'room')
     else:
-        print("No available rooms for that time")
+        print("No available rooms for that class")
         return []
 
 def change_class_room(connection, cursor, class_id, room_id, available_rooms):

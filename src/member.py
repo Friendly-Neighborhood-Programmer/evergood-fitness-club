@@ -106,21 +106,21 @@ def viewMetrics(cursor, id):
         if weights:
             print("Weights")
             for kg in weights:
-                print(kg[0] + " kg")
+                print(str(kg[0]) + " kg")
 
             print()
         
         if steps:
             print("Steps")
             for count in steps:
-                print(count[0] + " steps")
+                print(str(count[0]) + " steps")
 
             print()
 
         if heartrates:
             print("Heartrates")
             for bpm in heartrates:
-                print(bpm[0] + " bpm")
+                print(str(bpm[0]) + " bpm")
 
             print()
     else:
@@ -156,10 +156,7 @@ def generateAchievement(connection, cursor, id, name, val, min, step):
 def addWeight(connection, cursor, id, kg):
     try:
         cursor.execute(f"INSERT INTO weight (kg, member_id) \
-                        VALUES({kg}, {id});\
-                        UPDATE member \
-                        SET weight = {kg} \
-                        WHERE id = {id};")
+                        VALUES({kg}, {id});")
         connection.commit()
         generateAchievement(connection, cursor, id, 'Heavyweight', kg, 100, 50)
         return True
@@ -313,7 +310,7 @@ def dashboardMenu():
     print("(1) Routines\n(2) Achievements\n(3) Health Statistics\n(q) Back")
 
 def routinesMenu():
-    print("(1) View Current Routine\n(2) Change Routine")
+    print("(1) View Current Routine\n(2) Change Routine\n(q) Back")
 
 def enroll_in_class(connection, cursor, mid, cid):
     cursor.execute(f"SELECT start_time, end_time, day \

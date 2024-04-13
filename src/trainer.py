@@ -162,7 +162,6 @@ def get_available(cursor, s, e, d, table):
                    end_time >= '{e}' OR start_time > '{s}' AND end_time <= '{e}') AND {table}_id = {table}.id);")
     res = cursor.fetchall()
     available_ids = []
-    print(f"Available {table}s on {d} from {s} to {e}\n{'id': ^5}|{'name': <30}")
     if(table=="trainer"):
         print(f"Available {table}s on {d} from {s} to {e}\n{'id': ^5}|{'name': <30}|{'specialty': <20}")
     else:

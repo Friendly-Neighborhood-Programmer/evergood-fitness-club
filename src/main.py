@@ -432,6 +432,7 @@ def bill_payment_menu(db, admin_id):
             case "2":
                 admin.show_unpaid_members(db.cursor)
             case "3":
+                admin.show_unpaid_members(db.cursor)
                 member_id = input("Enter the ID of the member you want to charge: ")
                 if (admin.member_pay_bill(db.con, db.cursor, member_id)):
                     print("Payment successful.")
