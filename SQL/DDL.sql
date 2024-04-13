@@ -3,8 +3,7 @@ CREATE TYPE DAY AS ENUM ('SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT');
 CREATE TABLE admin
     (id         SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
-    password    TEXT NOT NULL,
-        CHECK (char_length(password) >= 8 AND char_length(password) <= 32));
+    password    TEXT NOT NULL);
 
 CREATE TABLE room
     (id         SERIAL PRIMARY KEY,
@@ -39,8 +38,7 @@ CREATE TABLE member
     gender      TEXT,
     bill_amount NUMERIC(5,2) DEFAULT 250,
     paid        BOOLEAN DEFAULT FALSE,
-    password    TEXT NOT NULL 
-        CHECK (char_length(password) >= 8 AND char_length(password) <= 32),
+    password    TEXT NOT NULL,
     routine_id  INT,
     FOREIGN KEY (routine_id)
         REFERENCES routine(id));
@@ -80,8 +78,7 @@ CREATE TABLE trainer
     (id         SERIAL PRIMARY KEY,
 	name        TEXT NOT NULL,
 	specialty   TEXT NOT NULL,
-	password    TEXT NOT NULL   
-        CHECK (char_length(password) >= 8 AND char_length(password) <= 32));
+	password    TEXT NOT NULL);
 
 CREATE TABLE class
     (id         SERIAL PRIMARY KEY,
