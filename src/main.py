@@ -10,8 +10,11 @@ def main_loop(db):
          
         match login_menu():
             case "1":
+                member_hash = hashlib.blake2b()
                 email = input("Enter your email: ")
                 password = input("Enter your password: ")
+                member_hash.update(password.encode())
+                password = member_hash.hexdigest()
                 member_id = member.login(db.cursor, email, password)
                 if (member_id):
                     print("Login successful. Welcome back!")
@@ -27,8 +30,11 @@ def main_loop(db):
                     print("Account creation failed. Please try again.")
                 
             case "3":
+                trainer_hash = hashlib.blake2b()
                 name = input("Enter your name: ")
                 password = input("Enter your password: ")
+                trainer_hash.update(password.encode())
+                password = trainer_hash.hexdigest()
                 trainer_id = trainer.login_trainer(db.cursor, name, password)
                 if (trainer_id):
                     print("Login successful. Welcome back!")
@@ -38,10 +44,8 @@ def main_loop(db):
                 admin_hash = hashlib.blake2b()
                 name = input("Enter your name: ")
                 password = input("Enter your password: ")
-                #password = ''.join(format(x, 'b') for x in bytearray(password.strip(), 'utf-8'))
                 admin_hash.update(password.encode())
                 password = admin_hash.hexdigest()
-                print(password)
                 admin_id = admin.login(db.cursor, name, password)
                 if (admin_id):
                     print("Login successful. Welcome back!")
@@ -83,7 +87,6 @@ def trainer_menu(db, trainer_id):
         trainer_choice = input()
 
 def prompt_for_member(db, trainer_id):
-    # TODO: debug trainer viewing member menu not working
     print("Here are all your classes and sessions and the members enrolled in them: ")
     trainer.get_classes_by_type(db.cursor, trainer_id, 'trainer')
     print()
@@ -159,7 +162,12 @@ def new_member_prompt(connection, cursor):
     while(member.check_email(cursor, email)):
         print("Email already exists. Please enter a different email.")
         email = input("Enter your email: ")
+
+    new_member_hash = hashlib.blake2b()
     password = input("Enter your password: ")
+    new_member_hash.update(password.encode())
+    password = new_member_hash.hexdigest()
+
     name = input("Enter your name: ")
     address = input("Enter your address: ")
     phone = input("Enter your phone: ")
@@ -348,7 +356,13 @@ def prompt_for_personal_information(db):
     while(member.check_email(db.cursor, details["email"])):
         print("Email already exists. Please enter a different email.")
         details["email"] = input("Enter your email: ")
-    details["password"] = input("Enter your password: ")
+    
+    password = input("Enter your password: ")
+    new_member_hash = hashlib.blake2b()
+    new_member_hash.update(password.encode())
+    password = new_member_hash.hexdigest()
+    details["password"] = password
+    
     details["name"] = input("Enter your name: ")
     details["address"] = input("Enter your address: ")
     details["phone"] = input("Enter your phone: ")

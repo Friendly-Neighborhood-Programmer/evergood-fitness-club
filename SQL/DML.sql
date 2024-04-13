@@ -61,7 +61,7 @@ INSERT INTO routine (name, description) VALUES
 
 INSERT INTO member (name, password, age, phone, gender, address, email, bill_amount, paid, routine_id) VALUES
     ('Dummy', '00000000', 0, '0', 'D', '0', 'dummy@gmail.com', 250, TRUE, 1),
-    ('Isaac Robert', '12345678', 30, '613-613-6133', 'M', '1 Malvern Street', 'isaac@gmail.com', 250, FALSE, 1),
+    ('Isaac Robert', 'f5560c3296de4e0ef868574bf96fc778bc580931a8cae2d2631de27ba055db1be2afd769d658c684d8bc5ee0c1b2a7583ec862d5e994b806c6fa2ab4d54cd7f4', 30, '613-613-6133', 'M', '1 Malvern Street', 'isaac@gmail.com', 250, FALSE, 1),
     ('Rachel Steward', '12345678', 30, '613-613-6134', 'G', '2 Malvern Street', 'rachel@gmail.com', 250, FALSE, 1);
 
 INSERT INTO goal (description, member_id) VALUES
@@ -84,7 +84,7 @@ VALUES
   (100, 3);
 
 INSERT INTO trainer (name, password, specialty) VALUES
-    ('lance lift', 'bigmuscles', 'deadlifts'),
+    ('lance lift', '14cc017f334adb77daf82bfab6213fe43a60c10a61fbe5226aba9aa6976dd81a77ee7117e9c8595d8c21740aa893055362d0273e727cfb5da219443481309d86', 'deadlifts'),
     ('tina treadmill', 'I<3running', 'cardio machines'),
     ('max muscle', 'gains4days', 'weight machines'),
     ('holly heartbeat', '95bpmandlovingit', 'zumba');
