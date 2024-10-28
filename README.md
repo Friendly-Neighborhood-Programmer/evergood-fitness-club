@@ -1,5 +1,5 @@
 # evergood-fitness-club
-A CLI application with full PostgreSQL integration, providing users, trainer, and admins control over their journey at the Evergood Fitness Club
+A CLI application with full PostgreSQL integration, providing users, trainers, and administrators control over their journey at the Evergood Fitness Club
 
 link to youtube demo video: https://www.youtube.com/watch?v=AO5oeES8XUw
 
